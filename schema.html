@@ -1024,32 +1024,50 @@
 
 // Connection definitions: [fromId, toId, colorClass]
 const connections = [
-  // CLAUDE.md ↔ AGENTS (via ghost mainly)
+  // ═══ CLAUDE.md = CENTRE — relié à TOUT ═══
   ['node-claudemd', 'node-ghost', 'v'],
+  ['node-claudemd', 'node-forge', 'v'],
+  ['node-claudemd', 'node-lafouine', 'v'],
   ['node-claudemd', 'node-rules', 'w'],
   ['node-claudemd', 'node-index', 'c'],
 
-  // GHOST → ALL strategic
-  ['node-ghost', 'node-deep-executor', 'v'],
-  ['node-ghost', 'node-opus-orchestrator', 'v'],
+  // ═══ GHOST (CEO) → ORCHESTRE TOUS LES AGENTS ═══
   ['node-ghost', 'node-dre', 'v'],
   ['node-ghost', 'node-tate', 'v'],
   ['node-ghost', 'node-tasha', 'v'],
+  ['node-ghost', 'node-tommy', 'v'],
   ['node-ghost', 'node-storm', 'v'],
   ['node-ghost', 'node-light', 'v'],
   ['node-ghost', 'node-forge', 'v'],
   ['node-ghost', 'node-lafouine', 'v'],
+  ['node-ghost', 'node-deep-executor', 'v'],
+  ['node-ghost', 'node-opus-orchestrator', 'v'],
 
-  // OPUS-ORCHESTRATOR → executors
+  // ═══ FORGE → PEUT CRÉER/MODIFIER TOUS LES AGENTS ═══
+  ['node-forge', 'node-dre', 'g'],
+  ['node-forge', 'node-tate', 'g'],
+  ['node-forge', 'node-tasha', 'g'],
+  ['node-forge', 'node-tommy', 'g'],
+  ['node-forge', 'node-storm', 'g'],
+  ['node-forge', 'node-light', 'g'],
+  ['node-forge', 'node-rapporteur', 'g'],
+  ['node-forge', 'node-fast-executor', 'g'],
+  ['node-forge', 'node-standard-executor', 'g'],
+  ['node-forge', 'node-deep-executor', 'g'],
+  ['node-forge', 'node-opus-orchestrator', 'g'],
+
+  // ═══ OPUS-ORCHESTRATOR → EXECUTORS ═══
   ['node-opus-orchestrator', 'node-standard-executor', 'v'],
   ['node-opus-orchestrator', 'node-fast-executor', 'v'],
   ['node-opus-orchestrator', 'node-rapporteur', 'v'],
 
-  // AGENTS → SKILLS
-  ['node-deep-executor', 'node-s-plan-review', 'v'],
-  ['node-deep-executor', 'node-s-vision360', 'v'],
+  // ═══ AGENTS → SKILLS (chaque agent sait quels skills charger) ═══
+  ['node-ghost', 'node-s-vision360', 'c'],
+  ['node-ghost', 'node-s-focus-process', 'c'],
+  ['node-ghost', 'node-s-plan-review', 'c'],
   ['node-dre', 'node-s-landing', 'c'],
   ['node-dre', 'node-s-branding', 'c'],
+  ['node-dre', 'node-s-presentation', 'c'],
   ['node-tate', 'node-s-ecommerce', 'c'],
   ['node-tate', 'node-s-focus-process', 'c'],
   ['node-tasha', 'node-s-copywriting', 'c'],
@@ -1057,27 +1075,43 @@ const connections = [
   ['node-tommy', 'node-s-branding', 'c'],
   ['node-tommy', 'node-s-presentation', 'c'],
   ['node-storm', 'node-s-vision360', 'c'],
-  ['node-storm', 'node-s-claude-feat', 'c'],
   ['node-light', 'node-s-plan-review', 'c'],
+  ['node-deep-executor', 'node-s-plan-review', 'c'],
+  ['node-deep-executor', 'node-s-vision360', 'c'],
   ['node-forge', 'node-s-agent-creation', 'c'],
   ['node-forge', 'node-s-create-new', 'g'],
   ['node-lafouine', 'node-s-create-new', 'g'],
-  ['node-lafouine', 'node-s-claude-feat', 'c'],
-  ['node-ghost', 'node-s-vision360', 'c'],
-  ['node-ghost', 'node-s-focus-process', 'c'],
+  ['node-lafouine', 'node-s-agent-creation', 'c'],
 
-  // AGENTS → INDEX
-  ['node-lafouine', 'node-index', 'c'],
-  ['node-storm', 'node-index', 'c'],
-
-  // INDEX → SKILLS hub
+  // ═══ INDEX.md = HUB DE TOUS LES SKILLS ═══
   ['node-index', 'node-s-vision360', 'c'],
   ['node-index', 'node-s-agent-creation', 'c'],
   ['node-index', 'node-s-plan-review', 'c'],
   ['node-index', 'node-s-focus-process', 'c'],
   ['node-index', 'node-s-copywriting', 'c'],
+  ['node-index', 'node-s-landing', 'c'],
+  ['node-index', 'node-s-ecommerce', 'c'],
+  ['node-index', 'node-s-marketing', 'c'],
+  ['node-index', 'node-s-branding', 'c'],
+  ['node-index', 'node-s-presentation', 'c'],
+  ['node-index', 'node-s-formation', 'c'],
+  ['node-index', 'node-s-claude-feat', 'c'],
+  ['node-index', 'node-s-create-new', 'c'],
 
-  // HOOKS → CLAUDE.md
+  // ═══ TOUS LES AGENTS CONSULTENT INDEX.md ═══
+  ['node-ghost', 'node-index', 'c'],
+  ['node-dre', 'node-index', 'c'],
+  ['node-tate', 'node-index', 'c'],
+  ['node-tasha', 'node-index', 'c'],
+  ['node-tommy', 'node-index', 'c'],
+  ['node-storm', 'node-index', 'c'],
+  ['node-light', 'node-index', 'c'],
+  ['node-lafouine', 'node-index', 'c'],
+  ['node-forge', 'node-index', 'c'],
+  ['node-deep-executor', 'node-index', 'c'],
+  ['node-opus-orchestrator', 'node-index', 'c'],
+
+  // ═══ HOOKS → CLAUDE.md (events système) ═══
   ['node-h1', 'node-claudemd', 'g'],
   ['node-h2', 'node-claudemd', 'g'],
   ['node-h3', 'node-claudemd', 'g'],
@@ -1086,19 +1120,12 @@ const connections = [
   ['node-h6', 'node-claudemd', 'g'],
   ['node-h7', 'node-claudemd', 'g'],
 
-  // PLUGINS → CLAUDE.md
+  // ═══ PLUGINS → CLAUDE.md + agents spécifiques ═══
   ['node-p1', 'node-claudemd', 'r'],
   ['node-p4', 'node-claudemd', 'r'],
   ['node-p7', 'node-claudemd', 'r'],
   ['node-mgrep', 'node-claudemd', 'r'],
-
-  // MCP → AGENTS
-  ['node-mcp1', 'node-tate', 'gr'],
-  ['node-mcp2', 'node-dre', 'gr'],
-  ['node-mcp2', 'node-tate', 'gr'],
-  ['node-mcp3', 'node-dre', 'gr'],
-
-  // PLUGINS specific
+  ['node-mgrep', 'node-storm', 'r'],
   ['node-p2', 'node-light', 'r'],
   ['node-p10', 'node-dre', 'r'],
   ['node-p10', 'node-tommy', 'r'],
@@ -1106,7 +1133,18 @@ const connections = [
   ['node-p12', 'node-tate', 'r'],
   ['node-p5', 'node-h1', 'r'],
 
-  // RULES → CLAUDE.md
+  // ═══ MCP → AGENTS ═══
+  ['node-mcp1', 'node-tate', 'gr'],
+  ['node-mcp1', 'node-light', 'gr'],
+  ['node-mcp2', 'node-dre', 'gr'],
+  ['node-mcp2', 'node-tate', 'gr'],
+  ['node-mcp2', 'node-storm', 'gr'],
+  ['node-mcp3', 'node-dre', 'gr'],
+
+  // ═══ RAPPORTEUR → CLAUDE.md (logs) ═══
+  ['node-rapporteur', 'node-claudemd', 'v'],
+
+  // ═══ RULES → CLAUDE.md ═══
   ['node-rules', 'node-claudemd', 'w'],
 
   // CREATE NEW block → agents + skill
