@@ -1,6 +1,6 @@
 # Focus OS v2.0 — Ton setup IA complet
 
-Claude Code pré-configuré avec 9 agents spécialisés, des workflows project-ready, et un système de mémoire persistante. Installe une fois, utilise à vie.
+Claude Code pré-configuré avec 14 agents spécialisés, des workflows project-ready, et un système de mémoire persistante. Installe une fois, utilise à vie.
 
 ---
 
@@ -8,9 +8,9 @@ Claude Code pré-configuré avec 9 agents spécialisés, des workflows project-r
 
 | Composant | Détails |
 |-----------|---------|
-| **9 agents** | ghost (CEO), dre (frontend), tate (backend), tasha (copy), light (QA), storm (recherche), tommy (branding), forge (factory), lafouine (bibliothèque) |
-| **3 skills** | vision360 (deep research), focus-process (workflow projet A→Z), agent-creation (factory d'agents) |
-| **4 hooks** | Blocage .env, format auto, session learnings, refresh rules |
+| **14 agents** | ghost (CEO), dre (frontend), tate (backend), tasha (copy), light (QA), storm (recherche), tommy (branding), forge (factory), lafouine (bibliothèque), fast-executor, standard-executor, deep-executor, opus-orchestrator, rapporteur |
+| **13 skills** | vision360, focus-process, agent-creation, plan-review, copywriting, seo-underground, claude-features, project-landing-page, project-ecommerce, project-marketing-strategy, project-branding, project-presentation, project-formation |
+| **7 hooks** | Blocage .env, format auto, session learnings, refresh rules, SessionStart, source-date-check, pre-compact |
 | **5 profils** | dev, designer, ceo, marketing, student — CLAUDE.md adapté à chaque rôle |
 | **Sécurité** | git push/commit bloqués par défaut, secrets Keychain macOS, OWASP systématique |
 | **Formation** | `formation.html` — guide complet interactif de chaque fonctionnalité |

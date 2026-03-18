@@ -257,7 +257,7 @@ install_agents() {
   fi
 
   # Agents CORE toujours installes
-  CORE_AGENTS=("ghost" "dre" "tate" "tasha" "light" "storm" "tommy" "forge" "lafouine")
+  CORE_AGENTS=("ghost" "dre" "tate" "tasha" "light" "storm" "tommy" "forge" "lafouine" "fast-executor" "standard-executor" "deep-executor" "opus-orchestrator" "rapporteur")
 
   for agent in "${CORE_AGENTS[@]}"; do
     SOURCE="$AGENTS_SRC/${agent}.md"

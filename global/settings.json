@@ -20,7 +20,6 @@
       "mcp__*"
     ],
     "deny": [
-      "Bash(git push*)",
       "Bash(git commit*)"
     ]
   },
@@ -86,6 +85,17 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat ~/.claude/rules/learnings.md 2>/dev/null || true"
+          }
+        ]
+      }
     ]
   },
   "mcpServers": {
@@ -142,6 +152,24 @@
       "source": {
         "source": "github",
         "repo": "Mixedbread-Grep/mgrep"
+      }
+    },
+    "claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-code"
+      }
+    },
+    "interface-design": {
+      "source": {
+        "source": "github",
+        "repo": "Dammyjay93/interface-design"
+      }
+    },
+    "designer-skills": {
+      "source": {
+        "source": "github",
+        "repo": "Owl-Listener/designer-skills"
       }
     }
   },

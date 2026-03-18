@@ -73,4 +73,4 @@ triggers:
 
 ---
 
-*Total: 12 skills | Derniere mise a jour: 2026-03-18*
+*Total: 13 skills | Derniere mise a jour: 2026-03-18*

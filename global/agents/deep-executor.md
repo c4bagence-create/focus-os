@@ -11,6 +11,9 @@ tools:
   - Task
 model: opus
 memory: user
+skills:
+  - plan-review
+  - vision360
 ---
 
 # DEEP-EXECUTOR — Analyse Profonde
