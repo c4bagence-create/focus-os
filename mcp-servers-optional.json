@@ -1,0 +1,59 @@
+{
+  "_note": "Copie les blocs dont tu as besoin dans ton ~/.claude/settings.json section mcpServers. Remplace les placeholders YOUR_*.",
+  "_doc": "https://docs.anthropic.com/en/docs/claude-code/mcp",
+
+  "mcpServers": {
+
+    "supabase": {
+      "_comment": "Supabase — base de données, auth, storage. Remplace YOUR_PROJECT_REF et YOUR_SUPABASE_ACCESS_TOKEN.",
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest"],
+      "env": {
+        "SUPABASE_PROJECT_REF": "YOUR_PROJECT_REF",
+        "SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN"
+      }
+    },
+
+    "brave-search": {
+      "_comment": "Brave Search — recherche web temps réel. Clé API sur https://api.search.brave.com/",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "YOUR_BRAVE_API_KEY"
+      }
+    },
+
+    "notion": {
+      "_comment": "Notion — lecture/écriture pages et databases. Via plugin: claude plugin add notion@claude-plugins-official",
+      "_install": "claude plugin add notion@claude-plugins-official",
+      "_manual": "Ou ajouter via MCP avec NOTION_API_KEY depuis https://www.notion.so/my-integrations",
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "NOTION_API_KEY": "YOUR_NOTION_INTEGRATION_TOKEN"
+      }
+    },
+
+    "figma": {
+      "_comment": "Figma — lecture fichiers, composants, styles. Via plugin: claude plugin add figma@claude-plugins-official",
+      "_install": "claude plugin add figma@claude-plugins-official",
+      "_manual": "Ou ajouter via MCP avec FIGMA_ACCESS_TOKEN depuis https://www.figma.com/developers/api#access-tokens",
+      "command": "npx",
+      "args": ["-y", "@figma/mcp-server"],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "YOUR_FIGMA_PERSONAL_ACCESS_TOKEN"
+      }
+    },
+
+    "chrome-devtools": {
+      "_comment": "Chrome DevTools — inspection DOM, console, network. Pas de clé API requise. Lance Chrome avec --remote-debugging-port=9222",
+      "_prereq": "google-chrome --remote-debugging-port=9222 &",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-chrome-devtools"],
+      "env": {
+        "CHROME_DEBUGGER_PORT": "9222"
+      }
+    }
+
+  }
+}

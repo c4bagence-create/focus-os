@@ -1,0 +1,687 @@
+name: "Focus OS — Parcours 30-60-90 Jours"
+version: "3.0"
+description: "De l'installation à l'expertise. Pas en 1h — en 90 jours."
+target: "Tout profil (dev, designer, CEO, student, marketing)"
+prerequisite: "onboarding.sh ou install.sh exécuté avec succès"
+model: "30-60-90 days mastery framework"
+
+# ─────────────────────────────────────────────
+# JOUR 1 — INSTALLATION + DÉCOUVERTE (~1h)
+# ─────────────────────────────────────────────
+phases:
+  - id: day_1
+    name: "Jour 1 — Installation + Découverte"
+    duration: "~1h"
+    goal: "Vérifier le setup. Voir les agents en action. Produire un premier résultat."
+
+    steps:
+
+      - id: hello
+        name: "Premier contact"
+        duration: "3 min"
+        description: >
+          Ton premier échange avec Claude. Objectif : vérifier que
+          le setup est correct et que Claude connaît ton profil.
+        actions:
+          - "Ouvre ton terminal (Ghostty, iTerm, Terminal.app — peu importe)"
+          - "Va dans un dossier de travail: cd ~/Desktop"
+          - "Lance Claude: claude"
+          - "Tape: 'Salut, présente-toi et dis-moi ce que tu sais faire'"
+          - "Observe: Claude doit mentionner tes agents, tes rules, et s'adapter à ton profil"
+        validation: "Claude mentionne ghost, dre, storm (ou les agents prioritaires de ton profil) ET parle de Vision360"
+        troubleshooting:
+          - symptom: "Claude se présente de façon générique sans mentionner les agents"
+            fix: "Vérifie que ~/.claude/CLAUDE.md existe: ls -la ~/.claude/CLAUDE.md"
+          - symptom: "Commande claude introuvable"
+            fix: "Relance le terminal ou tape: source ~/.zshrc"
+          - symptom: "Erreur d'authentification"
+            fix: "claude auth login — relie ton compte Anthropic"
+        tips:
+          - "Le ton de Claude dépend de ton CLAUDE.md. Dev = technique. CEO = stratégique. Designer = visuel."
+          - "Pas besoin de formules de politesse. Direct = mieux."
+        profile_notes:
+          dev: "Claude devrait mentionner tate (backend) et dre (frontend) en priorité"
+          designer: "Claude devrait parler de tommy (branding) et dre (UI/UX)"
+          ceo: "Claude devrait mentionner ghost (stratégie) et storm (recherche)"
+          marketing: "Claude devrait parler de tasha (copy) et storm (veille)"
+          student: "Claude devrait proposer un mode pédagogique et mentionner light (review)"
+
+      - id: explore_agents
+        name: "Découvrir les agents"
+        duration: "5 min"
+        description: >
+          Les agents sont des sous-Claude spécialisés. Tu ne gères pas des outils —
+          tu délègues à des collaborateurs IA.
+        actions:
+          - "Dis: 'Liste tous mes agents avec leur spécialité en une ligne chacun'"
+          - "Dis: 'Utilise storm pour chercher les tendances IA de cette semaine'"
+          - "Observe: storm cherche, synthétise, cite des sources — en autonomie"
+          - "Dis: 'Maintenant utilise ghost pour analyser si une agence IA est viable en 2026'"
+          - "Compare: storm = cherche. Ghost = analyse et décide."
+        validation: "Tu as vu deux agents différents travailler sur deux tâches différentes"
+        agent_glossary:
+          ghost: "CEO IA — planifie, coordonne, prend des décisions stratégiques"
+          dre: "Frontend premium — landing pages, UI, composants React/Next.js"
+          tate: "Backend — APIs, bases de données, deploy, sécurité"
+          tasha: "Copywriting — ads, emails, fiches produit, landing pages"
+          light: "QA — review code, sécurité OWASP, verdict avant deploy"
+          storm: "Recherche — veille, concurrence, alternatives, market intel"
+          tommy: "Branding — identité visuelle, prompts image, moodboards"
+          forge: "Factory — crée de nouveaux agents spécialisés à la demande"
+          lafouine: "Bibliothèque — indexe les connaissances, construit ta base de savoirs"
+        tips:
+          - "Tu peux combiner: 'Utilise storm pour chercher, puis ghost pour décider'"
+          - "Forge peut créer un agent sur mesure pour ton secteur (juridique, santé, immobilier...)"
+
+      - id: explore_skills
+        name: "Découvrir les skills"
+        duration: "4 min"
+        description: >
+          Les skills sont des protocoles que Claude suit automatiquement quand tu les invoques.
+          Pas besoin de tout réexpliquer à chaque fois.
+        actions:
+          - "Dis: 'Quels skills as-tu ? Liste-les avec une description'"
+          - "Dis: 'Explique-moi le focus-process en 5 étapes'"
+        validation: "Tu comprends la différence entre un agent (qui) et un skill (comment)"
+        skills_glossary:
+          agent-creation: "Comment créer, nommer, configurer un agent. Forge s'en sert automatiquement."
+          vision360: "Protocole de recherche approfondie: sources, alternatives, anticiper les problèmes"
+          focus-process: "Workflow projet complet de A à Z — Discovery, Brief, Build, Review, Ship"
+        tips:
+          - "Vision360 = Deep search obligatoire AVANT d'affirmer quoi que ce soit"
+          - "Focus-process = la façon dont ghost structure n'importe quel projet"
+
+      - id: understand_memory
+        name: "Comprendre la mémoire"
+        duration: "3 min"
+        description: >
+          Claude a une mémoire persistante. Il retient tes préférences, tes projets,
+          tes feedbacks entre les sessions. Ce n'est pas un chatbot sans mémoire.
+        actions:
+          - "Dis: 'Qu'est-ce que tu sais de moi ?'"
+          - "Observe: Claude consulte CLAUDE.md + MEMORY.md"
+          - "Dis: 'Retiens que je préfère les designs dark et les interfaces premium'"
+          - "Ferme Claude (Ctrl+C), relance (claude), demande: 'Qu'est-ce que tu retiens de moi ?'"
+        validation: "Claude retrouve l'information après relance"
+        tips:
+          - "MEMORY.md = mémoire auto. CLAUDE.md = règles permanentes. Les deux sont distincts."
+          - "Tu peux dire 'oublie que...' pour supprimer une info de ta mémoire"
+
+      - id: first_project_day1
+        name: "Premier projet guidé"
+        duration: "30 min"
+        goal: "Produire quelque chose de concret. Voir le workflow de A à Z."
+        profile_projects:
+          dev: "Une API REST simple avec authentification JWT"
+          designer: "Une landing page dark premium pour un produit fictif"
+          ceo: "Un plan de lancement produit structuré en 5 phases"
+          marketing: "Une séquence email de bienvenue (3 emails)"
+          student: "Un résumé structuré d'un sujet qui t'intéresse avec sources"
+        actions:
+          - "Dis: 'Je veux créer [TYPE de projet] pour [ton business ou idée]'"
+          - "Claude va activer le focus-process et te poser des questions de brief"
+          - "Réponds honnêtement et avec détails — tu es l'expert de ton business"
+          - "Dis: 'C'est bon, lance la production'"
+          - "Claude orchestre les agents. Laisse-le finir sans l'interrompre."
+          - "Note 3 points précis à améliorer, puis donne le feedback"
+        validation: "Tu as un premier résultat complet à 80%+ de ce que tu voulais"
+        agent_workflow_examples:
+          landing_page: "ghost (brief) → tasha (copy) → dre (HTML/CSS) → light (review)"
+          api: "ghost (architecture) → tate (code) → light (sécurité) → tate (corrections)"
+          email_sequence: "ghost (stratégie) → tasha (rédaction) → light (review)"
+          brand_plan: "ghost (stratégie) → storm (research) → tommy (identité) → tasha (messaging)"
+        feedback_quality_guide:
+          bad:
+            - "'C'est moche'"
+            - "'C'est pas ce que je voulais'"
+            - "'Refais tout'"
+          good:
+            - "'Le contraste titre/fond est insuffisant, passe le titre en blanc pur'"
+            - "'Le CTA En savoir plus est faible. Remplace par un verbe d'action: Démarrer maintenant'"
+            - "'La fonction createUser ne gère pas le cas où l'email existe déjà. Ajoute un try/catch'"
+
+      - id: customize_day1
+        name: "Personnaliser ton CLAUDE.md"
+        duration: "5 min"
+        description: >
+          Focus OS devient plus puissant personnalisé pour toi.
+          Ajoute ton business, tes préférences, tes règles.
+        actions:
+          - "Ouvre: open ~/.claude/CLAUDE.md"
+          - "Ajoute une section 'Mon Business' avec ton nom, rôle, produit, style préféré"
+          - "Sauvegarde, relance Claude"
+          - "Dis: 'Relis mon CLAUDE.md et confirme que tu comprends mon contexte'"
+        validation: "Claude répond avec des détails spécifiques à TON business"
+        customization_examples:
+          dev: |
+            ## Mon Business
+            - Stack: Next.js 15, Supabase, Vercel
+            - Projet principal: SaaS B2B facturation
+            - Préférences: TypeScript strict, tests obligatoires, OWASP systématique
+          designer: |
+            ## Mon Business
+            - Style: Dark premium, minimaliste, inspiré Awwwards
+            - Clients: Startups B2B Series A+
+            - Références: Linear, Vercel, Stripe Checkout
+          ceo: |
+            ## Mon Business
+            - Entreprise: [Nom] — [Secteur]
+            - Modèle: SaaS / E-commerce / Service
+            - Concurrents: [A], [B], [C]
+          marketing: |
+            ## Mon Business
+            - Marque: [Nom] — [Tagline]
+            - ICP: [Description détaillée client idéal]
+            - Ton de voix: Direct, ambitieux, sans jargon
+          student: |
+            ## Mon Profil
+            - Objectif: [Ce que tu veux apprendre/construire]
+            - Temps disponible: [X]h/semaine
+            - Projet fil rouge: [Description]
+        tips:
+          - "Plus ton CLAUDE.md est précis, moins tu répètes de contexte à chaque session"
+          - "Tu peux demander: 'Suggère des améliorations pour mon CLAUDE.md'"
+
+# ─────────────────────────────────────────────
+# SEMAINE 1 — PREMIERS PROJETS (J2 → J7)
+# ─────────────────────────────────────────────
+  - id: week_1
+    name: "Semaine 1 — Premiers projets"
+    duration: "J2 à J7 — 30 à 60 min/jour"
+    goal: "Créer au moins 1 projet terminé. Utiliser 3 agents différents. Tester Vision360 sur un vrai sujet."
+
+    objectives:
+      - "Lancer son premier project-type selon son profil"
+      - "Utiliser au moins 3 agents différents de façon intentionnelle"
+      - "Comprendre Vision360 avec un vrai sujet business"
+      - "Personnaliser ses rules selon son domaine"
+      - "Validation finale: 1 projet terminé et livrable"
+
+    steps:
+
+      - id: project_types
+        name: "Explorer les project-types"
+        duration: "J2-J3"
+        description: >
+          Chaque profil a des types de projets optimisés. Cette semaine, en faire au moins 1
+          de A à Z. Pas juste tester — livrer.
+        profile_projects:
+          dev:
+            - "API REST avec auth JWT, validation Zod, tests unitaires"
+            - "Dashboard admin avec Next.js + Supabase"
+          designer:
+            - "Landing page dark premium avec sections complètes"
+            - "Identité visuelle complète: palette, typo, composants"
+          ceo:
+            - "Plan de lancement produit en 5 phases avec budget"
+            - "Analyse concurrentielle top 5 avec recommandation"
+          marketing:
+            - "Séquence email de bienvenue (5 mails, copywriting complet)"
+            - "Stratégie Meta Ads avec angles créatifs et audiences"
+          student:
+            - "Article de fond sur un sujet avec sources académiques"
+            - "Fiche de révision interactive sur un module entier"
+        actions:
+          - "Choisis 1 project-type dans ta liste profil"
+          - "Dis: 'ghost, brief [project-type choisi] pour [ton contexte]'"
+          - "Laisse ghost orchestrer les agents nécessaires"
+          - "Itère jusqu'à 80%+ de satisfaction"
+          - "Sauvegarde le résultat dans un dossier dédié"
+        validation: "1 projet complet sauvegardé et livrable"
+        tips:
+          - "Ne pas viser la perfection — viser le livrable. L'itération vient après."
+          - "Note ce qui t'a surpris ou déçu pour mieux briefer la prochaine fois"
+
+      - id: use_3_agents
+        name: "Utiliser 3 agents différents intentionnellement"
+        duration: "J3-J5"
+        description: >
+          Cette semaine, invoquer explicitement 3 agents différents sur des tâches distinctes.
+          Comprendre la spécialité de chacun par l'expérience, pas par la lecture.
+        exercises:
+          - agent: "storm"
+            task: "Veille concurrentielle sur [ton marché] — top 3 acteurs, leurs forces/faiblesses"
+          - agent: "tasha"
+            task: "Rédige 3 variantes du titre de ma landing page pour [ton produit]"
+          - agent: "ghost"
+            task: "Planifie les 4 prochaines semaines de mon projet [X] avec jalons clairs"
+          - agent: "tommy"
+            task: "Crée une palette de 5 couleurs pour [ta marque] avec les codes hex"
+          - agent: "light"
+            task: "Review le code produit cette semaine — cherche les failles OWASP"
+        actions:
+          - "J3: storm pour une recherche sur ton marché"
+          - "J4: tasha ou tommy pour un livrable créatif"
+          - "J5: ghost ou light pour une analyse ou une review"
+        validation: "Tu as utilisé 3 agents sur 3 tâches différentes et tu peux décrire la spécialité de chacun"
+
+      - id: vision360_practice
+        name: "Vision360 sur un vrai sujet"
+        duration: "J4-J5"
+        description: >
+          Vision360 n'est pas juste un mot-clé. C'est un protocole de décision.
+          Cette semaine, l'utiliser sur une vraie décision devant toi.
+        actions:
+          - "Identifie 1 décision réelle non prise: outil, stack, stratégie, prestataire"
+          - "Dis: 'Lance une Vision360 sur [sujet]'"
+          - "Observe: sources > alternatives > points faibles > recommandation finale"
+          - "Prends la décision basée sur l'analyse"
+        vision360_structure:
+          step1: "Deep search — sources vérifiées, pas d'inventions"
+          step2: "Alternatives — au moins 2-3 options comparées objectivement"
+          step3: "Anticiper — quels problèmes dans 3, 6, 12 mois ?"
+          step4: "Autocritique — le point faible de la recommandation"
+          step5: "Décision — le meilleur choix avec justification concrète"
+        examples:
+          - "Vision360 sur les alternatives à Stripe pour un SaaS français"
+          - "Vision360 sur Next.js vs Remix pour mon prochain projet"
+          - "Vision360 sur les meilleures pratiques landing page B2B en 2026"
+          - "Vision360 sur les outils de scheduling pour créateurs de contenu"
+        validation: "Tu as pris une décision basée sur une analyse Vision360 — pas sur une intuition"
+        tips:
+          - "Vision360 coûte plus de tokens — réserve-le aux vraies décisions, pas aux questions triviales"
+          - "Tu peux demander 'Vision360 rapide' pour une version allégée (3 min)"
+
+      - id: rules_customization
+        name: "Personnaliser ses rules selon son domaine"
+        duration: "J6-J7"
+        description: >
+          Le CLAUDE.md de base est générique. Tes rules spécifiques font la différence.
+          Ajoute ce qui est propre à ton domaine, ton business, tes contraintes.
+        actions:
+          - "Dis: 'Analyse mon CLAUDE.md actuel et suggère 5 améliorations spécifiques à mon profil'"
+          - "Choisis les 2-3 suggestions les plus pertinentes"
+          - "Ouvre ~/.claude/CLAUDE.md et ajoute une section 'Mes règles métier'"
+          - "Sauvegarde et relis avec Claude pour validation"
+        examples_by_profile:
+          dev:
+            - "Toujours TypeScript strict. Jamais de any."
+            - "Tests unitaires obligatoires pour toute fonction critique"
+            - "Commentaires en français, code en anglais"
+          designer:
+            - "Palette limitée: 2 couleurs primaires + 1 accent"
+            - "Jamais de gradient sauf pour les backgrounds"
+            - "Accessibilité WCAG AA minimum sur tous les projets"
+          ceo:
+            - "Toujours demander le ROI estimé avant de valider un investissement"
+            - "Chaque décision > 500€/mois passe par une Vision360"
+            - "Compte-rendu en bullet points, jamais en paragraphes"
+          marketing:
+            - "Ton de voix: direct, sans jargon, verbe d'action en CTA"
+            - "A/B testing obligatoire sur tous les titres"
+            - "GDPR: toujours inclure un lien de désabonnement"
+          student:
+            - "Expliquer les concepts comme si j'avais 16 ans sur le sujet"
+            - "Toujours inclure des exemples concrets et des analogies"
+            - "Suggérer des ressources complémentaires après chaque réponse"
+        validation: "Ton CLAUDE.md contient des règles qui te sont spécifiques, pas génériques"
+
+# ─────────────────────────────────────────────
+# JOUR 30 — MAÎTRISE DES BASES
+# ─────────────────────────────────────────────
+  - id: day_30
+    name: "Jour 30 — Maîtrise des bases"
+    duration: "Checkpoint mensuel — 1h de bilan"
+    goal: "Avoir utilisé tous les project-types. Savoir créer un agent custom. Maîtriser les hooks et slash commands."
+
+    objectives:
+      - "A utilisé tous les project-types au moins 1 fois"
+      - "Sait créer un agent custom avec Forge"
+      - "Sait configurer et utiliser les hooks"
+      - "Connaît les slash commands essentiels"
+      - "A personnalisé ses rules selon son domaine"
+      - "Validation: portfolio de 3+ projets terminés"
+
+    steps:
+
+      - id: forge_custom_agent
+        name: "Créer son premier agent custom avec Forge"
+        description: >
+          Forge est l'agent qui crée des agents. Ton domaine métier mérite probablement
+          un agent spécialisé que les 9 agents core ne couvrent pas parfaitement.
+        actions:
+          - "Identifie un domaine récurrent dans ton travail non couvert par les agents core"
+          - "Dis: 'forge crée un agent spécialisé en [domaine] avec les compétences suivantes: [liste]'"
+          - "Forge va générer le frontmatter YAML, le CLAUDE.md, et valider les doublons"
+          - "Teste l'agent sur une tâche réelle de son domaine"
+          - "Itère avec forge si le résultat n'est pas assez précis"
+        examples:
+          - "forge crée un agent spécialisé en droit des sociétés français"
+          - "forge crée un agent spécialisé en growth hacking SaaS B2B"
+          - "forge crée un agent spécialisé en e-commerce Shopify avec fiscalité FR"
+          - "forge crée un agent spécialisé en rédaction académique APA"
+        validation: "Tu as un agent custom qui répond précisément sur son domaine"
+        tips:
+          - "Un bon agent custom a une spécialité très précise — pas 'marketing' mais 'Meta Ads e-commerce'"
+          - "Forge valide automatiquement les doublons — si un agent similaire existe, il t'alertera"
+
+      - id: hooks_mastery
+        name: "Comprendre et utiliser les hooks"
+        description: >
+          Les hooks sont des actions automatiques déclenchées par des événements.
+          4 hooks sont actifs par défaut. Tu peux en ajouter.
+        hooks_default:
+          security: "Détection OWASP automatique sur tout code généré"
+          format: "Format de réponse enforced (max 10 lignes sauf deep analysis)"
+          learnings: "Capture automatique des apprentissages après chaque session"
+          rules: "Vérification du respect des règles avant chaque action critique"
+        actions:
+          - "Dis: 'Liste mes hooks actifs et ce qu'ils font'"
+          - "Dis: 'Montre-moi le hook sécurité en action sur ce snippet: [colle un code]'"
+          - "Explore: open ~/.claude/hooks/ pour voir les définitions"
+          - "Crée un hook custom: 'forge crée un hook qui [action] quand [événement]'"
+        examples_hooks_custom:
+          - "Hook qui ajoute automatiquement des tests unitaires après chaque fonction générée"
+          - "Hook qui vérifie les performances (Lighthouse) après chaque landing page"
+          - "Hook qui génère un résumé MEMORY.md après chaque session > 30 min"
+        validation: "Tu sais ce que chaque hook fait et tu en as testé au moins 1 en situation réelle"
+
+      - id: slash_commands
+        name: "Maîtriser les slash commands essentiels"
+        description: >
+          Les slash commands sont des raccourcis vers les workflows les plus fréquents.
+          Les mémoriser = 10x plus rapide sur les tâches répétitives.
+        commands_essential:
+          /commit: "Montre le diff + propose un message de commit — bloque jusqu'à ta validation"
+          /commit-push-pr: "Workflow complet: commit + push + PR en une commande"
+          /code-review: "Review multi-agent automatique du code en cours"
+          /revise-claude-md: "Audit et amélioration automatique de ton CLAUDE.md"
+        actions:
+          - "Dans un repo git, tape: /commit"
+          - "Observe: diff affiché + message proposé + attente de confirmation"
+          - "Valide ou modifie le message, confirme"
+          - "Essaie: /code-review sur ton dernier fichier modifié"
+          - "Essaie: /revise-claude-md pour un audit de ta config"
+        git_rules:
+          - "git commit — bloqué par défaut, toujours confirmation + diff"
+          - "git push — bloqué par défaut, confirmation branche + remote"
+          - "gh repo create — toujours --private. Si public détecté → alerte immédiate"
+          - "Jamais --force, jamais --no-verify sans demande explicite"
+        validation: "Tu utilises /commit au lieu de git commit manuellement"
+
+      - id: portfolio_day30
+        name: "Bilan portfolio J30"
+        description: >
+          Jour 30 = checkpoint. Fais l'inventaire de ce que tu as produit.
+          3 projets minimum pour valider le niveau bases.
+        actions:
+          - "Dis: 'ghost, fais un bilan de mes 30 premiers jours sur Focus OS'"
+          - "Liste tes 3 projets terminés avec ce que tu as appris de chacun"
+          - "Identifie ton gap principal: qu'est-ce qui te prend encore trop de temps ?"
+          - "Demande: 'Qu'est-ce que je devrais maîtriser dans les 30 prochains jours ?'"
+        validation: "3+ projets documentés. Gap identifié. Plan J31-J60 défini."
+        resources:
+          - "formation.html → sections Agents / Skills / Hooks / Workflows"
+          - "~/.claude/agents/ pour voir la définition de tes agents"
+          - "~/.bmad-core/skills/ pour explorer les skills disponibles"
+
+# ─────────────────────────────────────────────
+# JOUR 60 — AUTONOMIE
+# ─────────────────────────────────────────────
+  - id: day_60
+    name: "Jour 60 — Autonomie"
+    duration: "Checkpoint bi-mensuel — 1h de bilan"
+    goal: "Créer ses propres skills. Maîtriser Agent Teams. Mener un projet complexe de A à Z."
+
+    objectives:
+      - "Crée ses propres skills pour ses process métier récurrents"
+      - "Configure des hooks avancés adaptés à son workflow"
+      - "Utilise Agent Teams pour des projets complexes (5+ agents)"
+      - "Contribue à la bibliothèque de connaissances via Lafouine"
+      - "Validation: un projet complexe mené de A à Z sans aide"
+
+    steps:
+
+      - id: custom_skills
+        name: "Créer ses propres skills"
+        description: >
+          Les skills sont des protocoles réutilisables. Si tu répètes le même type
+          de brief ou de workflow plus de 3 fois — c'est un skill.
+        actions:
+          - "Identifie un process que tu répètes souvent"
+          - "Dis: 'forge crée un skill pour [process] avec les étapes suivantes: [liste]'"
+          - "Forge génère le fichier YAML du skill dans ~/.bmad-core/skills/"
+          - "Teste le skill: 'Utilise le skill [nom] pour [nouveau projet]'"
+          - "Itère jusqu'à ce que le skill donne un résultat prévisible"
+        examples_by_profile:
+          dev:
+            - "Skill 'api-bootstrap': génère une API REST avec auth, validation, tests en 1 commande"
+            - "Skill 'security-audit': checklist OWASP automatique avant chaque deploy"
+          designer:
+            - "Skill 'brand-identity': palette + typo + composants en 1 brief"
+            - "Skill 'landing-critique': analyse UX/UI d'une page avec score et recommandations"
+          ceo:
+            - "Skill 'decision-framework': Vision360 + analyse risques + décision en 15 min"
+            - "Skill 'weekly-review': bilan hebdo business avec KPIs et prochaines actions"
+          marketing:
+            - "Skill 'campaign-brief': brief pub complet avec ICP, angles, channels, budget"
+            - "Skill 'content-calendar': planning contenu 30 jours avec hooks par réseau"
+          student:
+            - "Skill 'deep-study': synthèse d'un chapitre avec flashcards et quiz"
+            - "Skill 'essay-structure': plan détaillé + argumentation + sources pour un essai"
+        validation: "Tu as 1 skill custom qui fonctionne sur ton process métier principal"
+
+      - id: advanced_hooks
+        name: "Configurer des hooks avancés"
+        description: >
+          Les hooks avancés automatisent des workflows complets.
+          À ce stade, tu sais ce qui se répète — automatise-le.
+        actions:
+          - "Identifie 2 actions que tu fais manuellement après chaque session"
+          - "Dis: 'forge crée un hook post-session qui: [action 1] + [action 2]'"
+          - "Teste sur la prochaine session"
+          - "Ajuste si le hook est trop agressif (se déclenche trop souvent)"
+        examples:
+          - "Hook post-session: auto-génère un CHECKPOINT.md avec les décisions prises"
+          - "Hook pré-deploy: vérifie les variables d'environnement + OWASP avant chaque push"
+          - "Hook pré-commit: refuse le commit si des secrets (clés API) sont détectés dans le diff"
+          - "Hook post-brief: ajoute automatiquement le projet au MEMORY.md"
+        validation: "2 hooks custom actifs et utiles dans ton workflow quotidien"
+
+      - id: agent_teams
+        name: "Maîtriser Agent Teams pour projets complexes"
+        description: >
+          Agent Teams = plusieurs agents en parallèle coordonnés par un leader.
+          Pour les projets qui nécessitent plus de 3 compétences simultanées.
+        actions:
+          - "Choisis un projet complexe: produit complet, campagne multi-canal, architecture SaaS"
+          - "Dis: 'ghost, coordonne un swarm de 5 agents pour [projet] en parallèle'"
+          - "Ghost va briefer chaque agent, les lancer en parallèle, et synthétiser"
+          - "Observe la coordination: qui fait quoi, dans quel ordre, avec quels dépendances"
+          - "Interviens uniquement si la direction est fondamentalement mauvaise"
+        team_composition_examples:
+          saas_launch:
+            leader: "ghost (stratégie + coordination)"
+            agents:
+              - "storm (market research)"
+              - "tasha (messaging + copy)"
+              - "dre (landing page)"
+              - "tate (backend MVP)"
+              - "light (QA final)"
+          brand_identity:
+            leader: "ghost (brief + coordination)"
+            agents:
+              - "storm (tendances secteur)"
+              - "tommy (identité visuelle)"
+              - "tasha (brand voice + copy)"
+              - "dre (composants UI)"
+          content_campaign:
+            leader: "ghost (stratégie)"
+            agents:
+              - "storm (veille concurrents + tendances)"
+              - "tasha (copies ads + emails)"
+              - "tommy (briefs visuels)"
+              - "light (review compliance RGPD)"
+        tips:
+          - "JAMAIS deux agents sur le même fichier en parallèle — conflit assuré"
+          - "Ghost doit briefer chaque agent avec le contexte complet, pas juste 'fais X'"
+          - "Pour les très gros projets: 10-20 agents possible. Ne pas se limiter."
+        validation: "Un projet complexe produit avec 5+ agents en parallèle, coordonné par ghost"
+
+      - id: lafouine_knowledge
+        name: "Contribuer à la bibliothèque de connaissances"
+        description: >
+          Lafouine indexe ce que tu apprends pour que Claude s'en souvienne dans le futur.
+          Chaque deep search utile doit être indexé.
+        actions:
+          - "Après une Vision360 utile: 'lafouine indexe cette analyse dans ma bibliothèque'"
+          - "Après une découverte importante: 'lafouine sauvegarde cette information sur [sujet]'"
+          - "Interroge ta bibliothèque: 'lafouine, qu'est-ce que je sais sur [sujet] ?'"
+          - "Nettoie régulièrement: 'lafouine, quelles entrées sont obsolètes ?'"
+        validation: "Tu as 5+ entrées indexées dans ta bibliothèque de connaissances"
+        tips:
+          - "Lafouine = mémoire long terme. MEMORY.md = état courant. Les deux sont complémentaires."
+          - "Indexe les résultats de recherche, pas juste les décisions — le contexte compte"
+
+      - id: complex_project_day60
+        name: "Projet complexe de A à Z — validation J60"
+        description: >
+          Le test ultime du J60: mener un projet de bout en bout sans aide extérieure.
+          Idée → brief → agents → livrable → deploy.
+        actions:
+          - "Choisis un projet que tu n'aurais pas osé faire avant Focus OS"
+          - "Utilise ghost pour le planifier complètement (phases, agents, jalons)"
+          - "Lance le swarm"
+          - "Itère sans aide extérieure"
+          - "Déploie ou livre le résultat"
+          - "Documente ce que tu aurais fait différemment"
+        validation: "1 projet complexe livré de A à Z. Bilan rédigé."
+
+# ─────────────────────────────────────────────
+# JOUR 90 — EXPERT
+# ─────────────────────────────────────────────
+  - id: day_90
+    name: "Jour 90 — Expert"
+    duration: "Checkpoint final — 2h de bilan + transmission"
+    goal: "Système optimisé, pipeline complet, capable de former d'autres personnes."
+
+    objectives:
+      - "A son propre système de rules optimisé, documenté, maintenu"
+      - "Pipeline complet: idée → plan → exécution → déploiement → monitoring"
+      - "Forme d'autres personnes sur Focus OS"
+      - "Validation: peut onboarder quelqu'un d'autre en moins de 2h"
+
+    steps:
+
+      - id: optimized_rules
+        name: "Système de rules optimisé et documenté"
+        description: >
+          À J90, tes rules ne sont plus génériques. Elles reflètent exactement
+          comment tu travailles, tes contraintes, tes standards.
+        actions:
+          - "Dis: '/revise-claude-md — audit complet de mes rules en J90'"
+          - "Identifie les rules jamais utilisées (à supprimer)"
+          - "Identifie les situations non couvertes (à ajouter)"
+          - "Dis: 'Compare mon CLAUDE.md actuel avec celui du J1 — qu'est-ce qui a changé ?'"
+          - "Documente tes 5 rules les plus critiques dans un README.md dédié"
+        checklist_rules_expert:
+          - "Chaque rule a une raison d'être claire (le 'pourquoi')"
+          - "Aucune rule contradictoire"
+          - "Rules spécifiques à ton domaine > rules génériques"
+          - "Au moins 1 rule par type de projet récurrent"
+          - "Rules de sécurité adaptées à ton stack"
+        validation: "CLAUDE.md version finale documentée. Chaque rule justifiée."
+
+      - id: complete_pipeline
+        name: "Pipeline complet: idée → monitoring"
+        description: >
+          Un expert ne fait pas des tâches isolées. Il a un pipeline.
+          De l'idée au monitoring post-deploy, chaque étape est couverte.
+        pipeline_stages:
+          idea:
+            agent: "ghost"
+            output: "Brief structuré avec objectifs, contraintes, jalons"
+          plan:
+            agent: "ghost + storm"
+            output: "Architecture décisionnelle + research Vision360"
+          execution:
+            agents: "dre + tate + tasha + tommy (selon projet)"
+            output: "Livrable complet à 80%+"
+          review:
+            agent: "light"
+            output: "Rapport sécurité OWASP + corrections"
+          deploy:
+            agent: "tate"
+            output: "Deploy vérifié + variables d'env + git sécurisé"
+          monitoring:
+            agent: "storm"
+            output: "Veille post-deploy + alertes + métriques"
+        actions:
+          - "Choisis ton projet le plus récent"
+          - "Dis: 'ghost, crée un pipeline complet pour ce projet avec chaque étape documentée'"
+          - "Sauvegarde ce pipeline comme template dans ta bibliothèque Lafouine"
+          - "Utilise-le sur le prochain projet sans modification — mesure ce qui coince"
+        validation: "1 pipeline documenté et testé sur un vrai projet"
+
+      - id: teach_others
+        name: "Former d'autres personnes"
+        description: >
+          La vraie maîtrise se mesure à la capacité à transmettre.
+          Si tu peux onboarder quelqu'un en 2h, tu maîtrises vraiment.
+        actions:
+          - "Prépare ton 'onboarding script' personnel: ce que tu dirais à quelqu'un en J1"
+          - "Dis: 'ghost, aide-moi à créer un guide d'onboarding pour mon équipe/réseau'"
+          - "Adapte le guide à ton profil et ton domaine — pas le guide générique"
+          - "Teste-le sur une vraie personne (collègue, ami, client)"
+          - "Itère basé sur les questions qu'ils posent"
+        onboarding_session_structure:
+          "0-15 min": "Installation + premier contact Claude"
+          "15-30 min": "3 agents en action sur leurs vrais problèmes"
+          "30-60 min": "Premier projet guidé selon leur profil"
+          "60-90 min": "Vision360 sur leur décision la plus urgente"
+          "90-120 min": "Personnalisation CLAUDE.md + règles métier"
+        validation: "Tu as onboardé 1 personne avec succès. Elle a produit un résultat en 2h."
+
+      - id: mastery_bilan
+        name: "Bilan J90 — Mesure de progression"
+        description: >
+          Comparer J1 vs J90. Mesurer ce qui a changé dans ta façon de travailler.
+          Identifier les 3 prochains mois.
+        actions:
+          - "Dis: 'ghost, fais un bilan de mes 90 jours sur Focus OS'"
+          - "Mesure: combien de projets ? Quels types ? Quelle progression ?"
+          - "Identifie: quel a été ton plus gros changement de workflow ?"
+          - "Planifie: quels nouveaux agents ou skills pour les 90 prochains jours ?"
+        bilan_metrics:
+          - "Nombre de projets terminés (objectif: 10+)"
+          - "Nombre d'agents utilisés régulièrement (objectif: 5+)"
+          - "Nombre de skills custom créés (objectif: 3+)"
+          - "Nombre de hooks custom actifs (objectif: 2+)"
+          - "Temps moyen par projet vs J1 (objectif: -50%)"
+        validation: "Bilan documenté. Plan 90 prochains jours défini."
+
+# ─────────────────────────────────────────────
+# COMPLETION
+# ─────────────────────────────────────────────
+completion:
+  message: >
+    90 jours. De l'installation à l'expertise.
+    Tu as un système IA professionnel, personnalisé, et qui s'améliore avec le temps.
+    Maintenant tu formes les autres.
+  milestones:
+    day_1: "Setup opérationnel. Premier projet produit. CLAUDE.md personnalisé."
+    week_1: "3 agents maîtrisés. 1 projet terminé. Vision360 testé sur un vrai sujet."
+    day_30: "Tous les project-types explorés. Agent custom créé. Hooks configurés. Portfolio 3+ projets."
+    day_60: "Skills custom actifs. Agent Teams maîtrisé. Projet complexe livré de A à Z."
+    day_90: "Pipeline complet. Rules optimisées. Capable de former d'autres personnes."
+  what_you_have_at_90:
+    - "9+ agents spécialisés (core + customs selon ton domaine)"
+    - "3+ skills custom pour tes process métier"
+    - "4+ hooks actifs (défaut + customs)"
+    - "CLAUDE.md v90 — optimisé, documenté, maintenu"
+    - "Bibliothèque de connaissances Lafouine riche"
+    - "Pipeline idée → monitoring complet et testé"
+    - "Capacité à onboarder d'autres personnes en 2h"
+  mindset:
+    - "Claude n'est pas un assistant — c'est un collaborateur. Traite-le comme tel."
+    - "Plus tu donnes de contexte, meilleurs sont les résultats."
+    - "Un feedback précis vaut 10 feedbacks vagues."
+    - "Le swarm (multi-agents en parallèle) est la norme, pas l'exception."
+    - "Vision360 avant chaque décision importante. Toujours."
+    - "Un système qui nécessite ta maintenance manuelle mourra. Automatise."
+  resources:
+    formation: "open formation.html — guide complet interactif"
+    agents: "ls ~/.claude/agents/ — tes agents et leur définition"
+    skills: "ls ~/.bmad-core/skills/ — tes skills actifs"
+    hooks: "ls ~/.claude/hooks/ — tes hooks configurés"
+    memory: "cat ~/.claude/projects/-Users-[toi]/memory/MEMORY.md — ton état courant"

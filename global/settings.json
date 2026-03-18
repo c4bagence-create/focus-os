@@ -1,0 +1,102 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Edit(*)",
+      "Write(*)",
+      "Bash(tree:*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "Task(*)",
+      "Skill(*)"
+    ],
+    "deny": [
+      "Bash(git push*)",
+      "Bash(git commit*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/no-env-guard.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/format-on-write.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "WebSearch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/source-date-check.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/pre-compact.sh"
+          }
+        ]
+      }
+    ],
+    "_Stop_DISABLED": "session-learnings.sh desactive par defaut (coute des tokens). Pour activer: renommer en 'Stop' et supprimer ce commentaire",
+    "Stop_MANUAL": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-learnings.sh"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/refresh-rules.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--extension"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-context7"]
+    }
+  },
+  "effortLevel": "medium",
+  "teammateMode": "auto",
+  "_plugins_note": "Les plugins ne s'installent PAS via settings.json. Utiliser: claude plugin add [nom]. Recommandes: commit-commands, code-review, claude-md-management, playground, hookify, safety-net. Voir aussi: ./install-plugins.sh",
+  "_mcp_note": "MCP optionnels (Supabase, Brave Search, Notion, Figma, Chrome DevTools) dans mcp-servers-optional.json — copier les blocs nécessaires ici et remplacer les placeholders YOUR_*"
+}
