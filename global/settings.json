@@ -9,7 +9,9 @@
       "Grep(*)",
       "Edit(*)",
       "Write(*)",
-      "Bash(tree:*)",
+      "Bash",
+      "Bash(gh repo list:*)",
+      "Bash(git clone:*)",
       "WebFetch(*)",
       "WebSearch(*)",
       "Task(*)",
@@ -114,7 +116,8 @@
     "vercel@claude-plugins-official": true,
     "supabase@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "adversarial-spec@adversarial-spec": true
+    "adversarial-spec@adversarial-spec": true,
+    "mgrep@Mixedbread-Grep": true
   },
   "extraKnownMarketplaces": {
     "cc-marketplace": {
@@ -133,6 +136,12 @@
       "source": {
         "source": "github",
         "repo": "zscole/adversarial-spec"
+      }
+    },
+    "Mixedbread-Grep": {
+      "source": {
+        "source": "github",
+        "repo": "Mixedbread-Grep/mgrep"
       }
     }
   },

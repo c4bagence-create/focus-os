@@ -45,6 +45,7 @@ ALL_PLUGINS=(
     "supabase@claude-plugins-official"
     "github@claude-plugins-official"
     "adversarial-spec@adversarial-spec"
+    "mgrep@Mixedbread-Grep"
 )
 
 # Descriptions pour que l'élève comprenne ce qui s'installe
@@ -64,6 +65,7 @@ DESCRIPTIONS=(
     ["supabase"]="Base de données et auth Supabase"
     ["github"]="Issues, PR, repos GitHub"
     ["adversarial-spec"]="Spec collaborative multi-LLM"
+    ["mgrep"]="Recherche sémantique code + web (PRIORITAIRE)"
 )
 
 installed=0
