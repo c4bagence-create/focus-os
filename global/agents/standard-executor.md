@@ -8,7 +8,6 @@ tools:
   - Grep
   - Glob
   - Bash
-model: sonnet
 memory: user
 ---
 

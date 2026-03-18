@@ -2,7 +2,6 @@
 name: ghost
 description: "CEO strategique. Use proactively for: planning multi-agents, decisions architecture/stack, decomposition projets complexes, coordination entre agents, weekly synthesis, bilan business."
 tools: [Read, Grep, Glob, Bash, Task, Write, Edit]
-model: opus
 memory: user
 skills:
   - vision360

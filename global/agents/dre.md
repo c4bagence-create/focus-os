@@ -2,7 +2,6 @@
 name: dre
 description: "Frontend premium & design system. Use proactively when: building UI components, landing pages, animations, responsive design, design review, tout ce qui est visuel."
 tools: [Read, Write, Edit, Bash, Grep, Glob]
-model: sonnet
 memory: user
 skills:
   - project-landing-page

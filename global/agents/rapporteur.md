@@ -8,7 +8,6 @@ tools:
   - Glob
   - Grep
   - Bash
-model: haiku
 memory: user
 ---
 

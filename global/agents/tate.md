@@ -2,7 +2,6 @@
 name: tate
 description: "Backend, infra, API, database, deploy, securite. Use proactively for: server actions, Supabase RLS, migrations SQL, Docker, API integrations, deploy Vercel/VPS, scripts automatisation."
 tools: [Read, Write, Edit, Bash, Grep, Glob]
-model: sonnet
 memory: user
 skills:
   - project-ecommerce

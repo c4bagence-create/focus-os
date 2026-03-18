@@ -7,7 +7,6 @@ tools:
   - Glob
   - Bash
   - Task
-model: opus
 memory: user
 ---
 

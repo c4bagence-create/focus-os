@@ -6,7 +6,6 @@ tools:
   - Grep
   - Glob
   - Bash
-model: haiku
 memory: user
 ---
 

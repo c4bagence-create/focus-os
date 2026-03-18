@@ -10,7 +10,6 @@ tools:
   - Bash
   - WebSearch
   - WebFetch
-model: sonnet
 memory: user
 ---
 
@@ -54,7 +53,6 @@ name: nom-kebab-case
 description: Role en 1 ligne. Use proactively when [triggers precis].
 tools:
   - [liste adaptee au besoin]
-model: haiku|sonnet|opus
 memory: user
 ---
 ```

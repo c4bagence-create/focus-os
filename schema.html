@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus OS — System Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #08080d;
+    --bg2: #0d0d16;
+    --bg3: #12121e;
+    --violet: #7c3aed;
+    --violet-l: #a855f7;
+    --violet-g: rgba(124,58,237,0.15);
+    --violet-b: rgba(124,58,237,0.3);
+    --cyan: #06b6d4;
+    --cyan-l: #22d3ee;
+    --cyan-g: rgba(6,182,212,0.15);
+    --cyan-b: rgba(6,182,212,0.3);
+    --gold: #f59e0b;
+    --gold-l: #fbbf24;
+    --gold-g: rgba(245,158,11,0.15);
+    --gold-b: rgba(245,158,11,0.3);
+    --green: #10b981;
+    --green-l: #34d399;
+    --green-g: rgba(16,185,129,0.15);
+    --green-b: rgba(16,185,129,0.3);
+    --rose: #f43f5e;
+    --rose-l: #fb7185;
+    --rose-g: rgba(244,63,94,0.15);
+    --rose-b: rgba(244,63,94,0.3);
+    --white: #e2e8f0;
+    --muted: #64748b;
+    --border: rgba(255,255,255,0.06);
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* ── HEADER ── */
+  #header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px;
+    background: rgba(8,8,13,0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  #header .logo {
+    display: flex; align-items: center; gap: 10px;
+  }
+  #header .logo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--violet-l);
+    box-shadow: 0 0 12px var(--violet-l);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+  #header .logo-text {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--white); text-transform: uppercase;
+  }
+  #header .logo-sub {
+    font-size: 11px; font-weight: 400; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  #header .meta {
+    display: flex; align-items: center; gap: 20px;
+  }
+  .badge {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+    padding: 3px 8px; border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .badge-v { background: var(--violet-g); color: var(--violet-l); border: 1px solid var(--violet-b); }
+  .badge-c { background: var(--cyan-g); color: var(--cyan-l); border: 1px solid var(--cyan-b); }
+  .badge-g { background: var(--gold-g); color: var(--gold-l); border: 1px solid var(--gold-b); }
+
+  /* ── LEGEND ── */
+  #legend {
+    position: fixed; top: 68px; right: 20px;
+    background: rgba(13,13,22,0.92);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    z-index: 90;
+    backdrop-filter: blur(12px);
+  }
+  #legend .leg-title { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .leg-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--white); margin-bottom: 5px; }
+  .leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .leg-dot.v { background: var(--violet-l); box-shadow: 0 0 6px var(--violet); }
+  .leg-dot.c { background: var(--cyan-l); box-shadow: 0 0 6px var(--cyan); }
+  .leg-dot.g { background: var(--gold-l); box-shadow: 0 0 6px var(--gold); }
+  .leg-dot.gr { background: var(--green-l); box-shadow: 0 0 6px var(--green); }
+  .leg-dot.r { background: var(--rose-l); box-shadow: 0 0 6px var(--rose); }
+  .leg-dot.w { background: var(--white); }
+
+  /* ── CONTROLS ── */
+  #controls {
+    position: fixed; bottom: 20px; right: 20px;
+    display: flex; flex-direction: column; gap: 6px;
+    z-index: 90;
+  }
+  .ctrl-btn {
+    width: 36px; height: 36px;
+    background: rgba(13,13,22,0.92);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.15); }
+
+  #zoom-label {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    background: rgba(13,13,22,0.8);
+    padding: 4px 10px; border-radius: 6px;
+    border: 1px solid var(--border);
+    z-index: 90;
+    pointer-events: none;
+  }
+
+  /* ── CANVAS ── */
+  #canvas-wrap {
+    position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
+    overflow: hidden;
+    cursor: grab;
+  }
+  #canvas-wrap.dragging { cursor: grabbing; }
+  #canvas {
+    position: absolute;
+    width: 2600px; height: 1900px;
+    transform-origin: 0 0;
+    will-change: transform;
+  }
+
+  /* ── SVG LINES ── */
+  #svg-lines {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+  .conn-line {
+    fill: none;
+    stroke-width: 1.5;
+    stroke-dasharray: 6 4;
+    animation: dash-flow 3s linear infinite;
+    opacity: 0.35;
+    transition: opacity 0.3s, stroke-width 0.3s;
+  }
+  .conn-line.v { stroke: var(--violet-l); }
+  .conn-line.c { stroke: var(--cyan-l); }
+  .conn-line.g { stroke: var(--gold-l); }
+  .conn-line.gr { stroke: var(--green-l); }
+  .conn-line.r { stroke: var(--rose-l); }
+  .conn-line.w { stroke: var(--white); }
+  @keyframes dash-flow {
+    from { stroke-dashoffset: 100; }
+    to { stroke-dashoffset: 0; }
+  }
+  .conn-line.highlighted { opacity: 1; stroke-width: 2.5; }
+  .conn-line.faded { opacity: 0.05; }
+
+  /* ── NODES ── */
+  .node {
+    position: absolute;
+    border-radius: 12px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s, opacity 0.3s;
+    pointer-events: all;
+  }
+  .node:hover { transform: scale(1.04); }
+  .node.faded { opacity: 0.15; }
+  .node.highlighted { transform: scale(1.06); }
+
+  /* CENTER NODE */
+  .node-center {
+    width: 200px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.25) 0%, rgba(168,85,247,0.1) 100%);
+    border-color: var(--violet-b);
+    box-shadow: 0 0 40px rgba(124,58,237,0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .node-center .icon { font-size: 28px; margin-bottom: 8px; }
+  .node-center .label {
+    font-size: 15px; font-weight: 700;
+    color: var(--white);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .node-center .version {
+    font-size: 10px; color: var(--violet-l);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 4px;
+  }
+  .node-center .rules-list {
+    margin-top: 12px; text-align: left;
+    border-top: 1px solid var(--violet-b);
+    padding-top: 10px;
+  }
+  .node-center .rule-item {
+    font-size: 9px; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.7;
+  }
+  .node-center .rule-item span { color: var(--violet-l); }
+
+  /* AGENT NODES */
+  .node-agent {
+    width: 160px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.12) 0%, rgba(124,58,237,0.05) 100%);
+    border-color: var(--violet-b);
+    box-shadow: 0 0 20px rgba(124,58,237,0.08);
+  }
+  .node-agent.opus {
+    background: linear-gradient(135deg, rgba(124,58,237,0.22) 0%, rgba(124,58,237,0.1) 100%);
+    border-color: rgba(168,85,247,0.5);
+    box-shadow: 0 0 24px rgba(124,58,237,0.15);
+  }
+  .node-agent.haiku {
+    background: linear-gradient(135deg, rgba(124,58,237,0.08) 0%, rgba(124,58,237,0.03) 100%);
+    border-color: rgba(124,58,237,0.2);
+  }
+  .agent-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .agent-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--violet-l); box-shadow: 0 0 8px var(--violet); flex-shrink: 0; }
+  .node-agent.haiku .agent-dot { background: #8b5cf6; box-shadow: 0 0 8px #8b5cf6; }
+  .agent-name { font-size: 12px; font-weight: 700; color: var(--violet-l); font-family: 'JetBrains Mono', monospace; }
+  .agent-role { font-size: 10px; color: var(--muted); line-height: 1.4; }
+
+  /* SKILL NODES */
+  .node-skill {
+    width: 152px;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.04) 100%);
+    border-color: var(--cyan-b);
+    box-shadow: 0 0 16px rgba(6,182,212,0.07);
+  }
+  .skill-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .skill-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan-l); box-shadow: 0 0 6px var(--cyan); flex-shrink: 0; }
+  .skill-name { font-size: 11px; font-weight: 600; color: var(--cyan-l); font-family: 'JetBrains Mono', monospace; }
+  .skill-type { font-size: 9px; color: var(--muted); }
+  .skill-tag {
+    display: inline-block; margin-top: 5px;
+    font-size: 9px; padding: 1px 5px; border-radius: 3px;
+    background: var(--cyan-g); color: var(--cyan);
+    border: 1px solid rgba(6,182,212,0.2);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* HOOK NODES */
+  .node-hook {
+    padding: 9px 12px;
+    background: linear-gradient(135deg, rgba(245,158,11,0.12) 0%, rgba(245,158,11,0.04) 100%);
+    border-color: var(--gold-b);
+    box-shadow: 0 0 16px rgba(245,158,11,0.07);
+  }
+  .hook-header { display: flex; align-items: center; gap: 6px; }
+  .hook-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-l); box-shadow: 0 0 6px var(--gold); flex-shrink: 0; }
+  .hook-event { font-size: 10px; font-weight: 600; color: var(--gold-l); font-family: 'JetBrains Mono', monospace; }
+  .hook-action { font-size: 9px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+  .hook-script { font-size: 9px; color: var(--gold); font-family: 'JetBrains Mono', monospace; margin-top: 3px; opacity: 0.8; }
+
+  /* PLUGIN NODES */
+  .node-plugin {
+    padding: 7px 10px;
+    background: linear-gradient(135deg, rgba(244,63,94,0.1) 0%, rgba(244,63,94,0.04) 100%);
+    border-color: var(--rose-b);
+    box-shadow: 0 0 12px rgba(244,63,94,0.06);
+  }
+  .plugin-name { font-size: 10px; font-weight: 600; color: var(--rose-l); font-family: 'JetBrains Mono', monospace; }
+  .plugin-desc { font-size: 9px; color: var(--muted); margin-top: 2px; }
+
+  /* MCP NODES */
+  .node-mcp {
+    padding: 9px 12px;
+    background: linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.04) 100%);
+    border-color: var(--green-b);
+    box-shadow: 0 0 16px rgba(16,185,129,0.07);
+  }
+  .mcp-name { font-size: 11px; font-weight: 600; color: var(--green-l); font-family: 'JetBrains Mono', monospace; }
+  .mcp-desc { font-size: 9px; color: var(--muted); margin-top: 2px; }
+
+  /* RULES NODES */
+  .node-rules {
+    padding: 10px 14px;
+    background: rgba(13,13,22,0.8);
+    border-color: rgba(255,255,255,0.12);
+  }
+  .rules-title { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .rule-entry { font-size: 10px; color: var(--white); line-height: 1.9; }
+  .rule-entry .always { font-size: 8px; color: var(--gold); margin-left: 4px; }
+
+  /* PROFILE NODES */
+  .node-profiles {
+    padding: 10px 14px;
+    background: rgba(13,13,22,0.8);
+    border-color: rgba(255,255,255,0.08);
+  }
+  .profiles-title { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .profile-list { display: flex; flex-wrap: wrap; gap: 4px; }
+  .profile-tag {
+    font-size: 9px; padding: 2px 7px; border-radius: 4px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* INDEX NODE */
+  .node-index {
+    width: 160px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(6,182,212,0.18) 0%, rgba(6,182,212,0.06) 100%);
+    border-color: rgba(6,182,212,0.45);
+    box-shadow: 0 0 30px rgba(6,182,212,0.12), inset 0 1px 0 rgba(255,255,255,0.06);
+    text-align: center;
+  }
+  .index-icon { font-size: 22px; margin-bottom: 6px; }
+  .index-label { font-size: 13px; font-weight: 700; color: var(--cyan-l); font-family: 'JetBrains Mono', monospace; }
+  .index-sub { font-size: 9px; color: var(--muted); margin-top: 3px; }
+
+  /* SECTION LABELS */
+  .section-label {
+    position: absolute;
+    font-size: 9px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+    opacity: 0.6;
+  }
+
+  /* ── TOOLTIP PANEL ── */
+  #panel {
+    position: fixed; top: 68px; left: 20px;
+    width: 280px;
+    background: rgba(13,13,22,0.96);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 90;
+    backdrop-filter: blur(16px);
+    transition: opacity 0.2s, transform 0.2s;
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+  }
+  #panel.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+  #panel-close {
+    position: absolute; top: 10px; right: 12px;
+    font-size: 16px; cursor: pointer; color: var(--muted);
+    transition: color 0.2s;
+  }
+  #panel-close:hover { color: var(--white); }
+  #panel-type { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  #panel-name { font-size: 16px; font-weight: 700; color: var(--white); font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+  #panel-meta { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+  #panel-body { font-size: 11px; color: var(--white); line-height: 1.7; }
+  #panel-body .pb-label { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 10px; margin-bottom: 4px; }
+  #panel-body .pb-tag {
+    display: inline-block; margin: 2px; font-size: 9px;
+    padding: 2px 7px; border-radius: 4px; border: 1px solid;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  #panel-body .pb-tag.v { color: var(--violet-l); border-color: var(--violet-b); background: var(--violet-g); }
+  #panel-body .pb-tag.c { color: var(--cyan-l); border-color: var(--cyan-b); background: var(--cyan-g); }
+  #panel-body .pb-tag.g { color: var(--gold-l); border-color: var(--gold-b); background: var(--gold-g); }
+  #panel-body .pb-tag.r { color: var(--rose-l); border-color: var(--rose-b); background: var(--rose-g); }
+  #panel-body .pb-tag.gr { color: var(--green-l); border-color: var(--green-b); background: var(--green-g); }
+
+  /* ── GRID BG ── */
+  #canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* ── GLOW ORBS ── */
+  .glow-orb {
+    position: absolute; border-radius: 50%;
+    pointer-events: none; filter: blur(80px);
+  }
+
+  /* ── CREATE NEW BLOCK ── */
+  .node-create-new {
+    width: 220px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(245,158,11,0.14) 0%, rgba(245,158,11,0.05) 100%);
+    border: 1.5px solid var(--gold-b);
+    box-shadow: 0 0 30px rgba(245,158,11,0.18), 0 0 60px rgba(245,158,11,0.08), inset 0 1px 0 rgba(255,255,255,0.06);
+    animation: create-pulse 2.8s ease-in-out infinite;
+  }
+  @keyframes create-pulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(245,158,11,0.18), 0 0 60px rgba(245,158,11,0.08), inset 0 1px 0 rgba(255,255,255,0.06); border-color: rgba(245,158,11,0.3); }
+    50% { box-shadow: 0 0 44px rgba(245,158,11,0.38), 0 0 88px rgba(245,158,11,0.16), inset 0 1px 0 rgba(255,255,255,0.08); border-color: rgba(245,158,11,0.6); }
+  }
+  .create-new-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold-l); font-family: 'JetBrains Mono', monospace; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .create-new-title::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold-l); box-shadow: 0 0 8px var(--gold);
+    flex-shrink: 0;
+  }
+  .create-new-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 10px; color: var(--white); line-height: 1.5;
+    padding: 5px 0; border-bottom: 1px solid rgba(245,158,11,0.08);
+  }
+  .create-new-item:last-child { border-bottom: none; }
+  .create-new-icon { font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+  .create-new-label { flex: 1; }
+  .create-new-via { font-size: 9px; color: var(--gold); font-family: 'JetBrains Mono', monospace; margin-top: 2px; opacity: 0.8; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    <div>
+      <div class="logo-text">Focus OS — System Architecture</div>
+      <div class="logo-sub">v5.0 · 2026-03-18 · ironblock</div>
+    </div>
+  </div>
+  <div class="meta">
+    <span class="badge badge-v">14 Agents</span>
+    <span class="badge badge-c">13 Skills</span>
+    <span class="badge badge-g">7 Hooks</span>
+  </div>
+</header>
+
+<!-- LEGEND -->
+<div id="legend">
+  <div class="leg-title">Légende</div>
+  <div class="leg-item"><div class="leg-dot v"></div> Agents</div>
+  <div class="leg-item"><div class="leg-dot c"></div> Skills</div>
+  <div class="leg-item"><div class="leg-dot g"></div> Hooks</div>
+  <div class="leg-item"><div class="leg-dot gr"></div> MCP Servers</div>
+  <div class="leg-item"><div class="leg-dot r"></div> Plugins</div>
+  <div class="leg-item"><div class="leg-dot w"></div> System</div>
+</div>
+
+<!-- PANEL -->
+<div id="panel">
+  <span id="panel-close">✕</span>
+  <div id="panel-type"></div>
+  <div id="panel-name"></div>
+  <div id="panel-meta"></div>
+  <div id="panel-body"></div>
+</div>
+
+<!-- CONTROLS -->
+<div id="controls">
+  <div class="ctrl-btn" id="btn-zoomin" title="Zoom +">+</div>
+  <div class="ctrl-btn" id="btn-zoomout" title="Zoom −">−</div>
+  <div class="ctrl-btn" id="btn-reset" title="Reset vue" style="font-size:12px;">⌂</div>
+</div>
+<div id="zoom-label">100%</div>
+
+<!-- CANVAS -->
+<div id="canvas-wrap">
+<div id="canvas">
+
+<!-- GLOW ORBS -->
+<div class="glow-orb" style="width:600px;height:600px;top:600px;left:800px;background:rgba(124,58,237,0.06);"></div>
+<div class="glow-orb" style="width:400px;height:400px;top:200px;left:200px;background:rgba(6,182,212,0.05);"></div>
+<div class="glow-orb" style="width:400px;height:400px;top:200px;left:1800px;background:rgba(6,182,212,0.05);"></div>
+<div class="glow-orb" style="width:300px;height:300px;top:80px;left:1000px;background:rgba(245,158,11,0.04);"></div>
+<div class="glow-orb" style="width:500px;height:300px;top:1550px;left:600px;background:rgba(244,63,94,0.04);"></div>
+
+<!-- SVG LINES -->
+<svg id="svg-lines" xmlns="http://www.w3.org/2000/svg"></svg>
+
+<!-- ═══════════════════════ SECTION LABELS ═══════════════════════ -->
+<div class="section-label" style="left:80px;top:85px;">Agents · Stratégie</div>
+<div class="section-label" style="left:80px;top:460px;">Agents · Exécution</div>
+<div class="section-label" style="left:80px;top:1080px;">Agents · Vitesse</div>
+<div class="section-label" style="left:1940px;top:1140px;">Extensibility</div>
+<div class="section-label" style="left:1760px;top:85px;">Project Types</div>
+<div class="section-label" style="left:1760px;top:590px;">Knowledge</div>
+<div class="section-label" style="left:1760px;top:890px;">System</div>
+<div class="section-label" style="left:480px;top:78px;">Hooks · Events</div>
+<div class="section-label" style="left:400px;top:1600px;">Plugins</div>
+<div class="section-label" style="left:1300px;top:1600px;">MCP Servers</div>
+
+<!-- ═══════════════════════ CENTER: CLAUDE.md ═══════════════════════ -->
+<div class="node node-center" id="node-claudemd" style="left:1130px;top:620px;"
+  data-type="System" data-name="CLAUDE.md" data-meta="Cerveau global · v5.0 · alwaysApply"
+  data-desc="Le fichier maître chargé à chaque session. Définit l'identité, les règles critiques, la posture, et orchestre tout le système Focus OS."
+  data-skills="" data-extra="5 Règles critiques|7 Règles d'or|Posture Claude|Contexte par projet|Hiérarchie configs">
+  <div class="icon">🧠</div>
+  <div class="label">CLAUDE.md</div>
+  <div class="version">v5.0 · alwaysApply</div>
+  <div class="rules-list">
+    <div class="rule-item"><span>01</span> Subagents spécialisés</div>
+    <div class="rule-item"><span>02</span> Routage agents</div>
+    <div class="rule-item"><span>03</span> Git = confirmation</div>
+    <div class="rule-item"><span>04</span> Sécurité Keychain</div>
+    <div class="rule-item"><span>05</span> Vision360</div>
+    <div class="rule-item"><span>06</span> Autonomie totale</div>
+    <div class="rule-item"><span>07</span> Bibliothèque skills</div>
+  </div>
+</div>
+
+<!-- INDEX.md HUB -->
+<div class="node node-index" id="node-index" style="left:1140px;top:1060px;"
+  data-type="Hub" data-name="INDEX.md" data-meta="Bibliothèque centrale · Hub des skills"
+  data-desc="La bibliothèque de connaissances centrale. Tous les skills y sont référencés. LAFOUINE alimente INDEX.md après chaque deep search."
+  data-skills="Tous les skills" data-extra="">
+  <div class="index-icon">📚</div>
+  <div class="index-label">INDEX.md</div>
+  <div class="index-sub">Bibliothèque · Hub skills</div>
+</div>
+
+<!-- ═══════════════════════ AGENTS LEFT ═══════════════════════ -->
+
+<!-- STRATEGIE OPUS -->
+<div class="node node-agent opus" id="node-ghost" style="left:78px;top:108px;"
+  data-type="Agent · Stratégie" data-name="ghost" data-meta="Opus · CEO / Orchestrateur"
+  data-desc="Agent CEO. Stratégie, coordination, planning. Connecté à TOUS les autres agents. Lance les swarms, valide les décisions architecturales."
+  data-skills="vision360,focus-process,plan-review" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">ghost</div></div>
+  <div class="agent-role">CEO · Stratégie<br>Coordination globale</div>
+</div>
+
+<div class="node node-agent opus" id="node-deep-executor" style="left:78px;top:270px;"
+  data-type="Agent · Stratégie" data-name="deep-executor" data-meta="Opus · Exécution complexe"
+  data-desc="Exécute les tâches complexes qui nécessitent une réflexion profonde. Utilise plan-review pour valider avant d'agir."
+  data-skills="plan-review,vision360" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">deep-executor</div></div>
+  <div class="agent-role">Exécution complexe<br>Deep reasoning</div>
+</div>
+
+<div class="node node-agent opus" id="node-opus-orchestrator" style="left:78px;top:390px;"
+  data-type="Agent · Stratégie" data-name="opus-orchestrator" data-meta="Opus · Orchestrateur swarm"
+  data-desc="Orchestre les teams d'agents. Coordonne les executors (standard, fast), distribue les tâches en parallèle."
+  data-skills="agent-creation,focus-process" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">opus-orchestrator</div></div>
+  <div class="agent-role">Orchestrateur swarm<br>Coordination teams</div>
+</div>
+
+<!-- EXECUTION SONNET -->
+<div class="node node-agent" id="node-dre" style="left:78px;top:490px;"
+  data-type="Agent · Exécution" data-name="dre" data-meta="Sonnet · Frontend / UI-UX"
+  data-desc="Frontend perfectionniste. Pixel-perfect, animations GSAP/Framer, Tailwind v4 OKLCH, shadcn/ui. Stack: React/Next.js, dark/gold premium."
+  data-skills="project-landing-page,project-branding,copywriting" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">dre</div></div>
+  <div class="agent-role">Frontend · UI/UX<br>Design system · Animations</div>
+</div>
+
+<div class="node node-agent" id="node-tate" style="left:78px;top:610px;"
+  data-type="Agent · Exécution" data-name="tate" data-meta="Sonnet · Backend / Infra"
+  data-desc="Backend solide. API, infra, deploy, sécurité. OWASP top 10. Gère Supabase, Vercel, FastAPI, Redis. Stack Node/Python."
+  data-skills="project-ecommerce,focus-process" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">tate</div></div>
+  <div class="agent-role">Backend · Infra · API<br>Deploy · Sécurité</div>
+</div>
+
+<div class="node node-agent" id="node-tasha" style="left:78px;top:730px;"
+  data-type="Agent · Exécution" data-name="tasha" data-meta="Sonnet · Copywriting / Content"
+  data-desc="Copywriter premium. Ads, emails, scripts, landing pages. Connaît les univers Focus, Moneymakers, E-commerce. Utilise les skills marketing."
+  data-skills="copywriting,project-marketing-strategy" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">tasha</div></div>
+  <div class="agent-role">Copywriting · Ads<br>Emails · Contenu</div>
+</div>
+
+<div class="node node-agent" id="node-tommy" style="left:78px;top:848px;"
+  data-type="Agent · Exécution" data-name="tommy" data-meta="Sonnet · Design / Branding"
+  data-desc="Design et branding. Identité visuelle, logos, charte graphique. Travaille avec Figma MCP. Connait les univers visuels de tous les projets."
+  data-skills="project-branding,project-presentation" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">tommy</div></div>
+  <div class="agent-role">Design · Branding<br>Identité visuelle</div>
+</div>
+
+<div class="node node-agent" id="node-storm" style="left:78px;top:963px;"
+  data-type="Agent · Exécution" data-name="storm" data-meta="Sonnet · Recherche / OSINT"
+  data-desc="Recherche et veille. Market intel, OSINT, deep search. Après chaque recherche → alimente INDEX.md via LAFOUINE. Vision360 appliqué."
+  data-skills="vision360,claude-features" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">storm</div></div>
+  <div class="agent-role">Recherche · Veille<br>Market intel · OSINT</div>
+</div>
+
+<div class="node node-agent" id="node-light" style="left:270px;top:490px;"
+  data-type="Agent · Exécution" data-name="light" data-meta="Sonnet · QA / Review"
+  data-desc="QA et code review. Compliance, tests, sécurité. Valide avant merge. Utilise plan-review skill pour checker la cohérence des plans."
+  data-skills="plan-review" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">light</div></div>
+  <div class="agent-role">QA · Review code<br>Compliance · Tests</div>
+</div>
+
+<div class="node node-agent" id="node-forge" style="left:270px;top:610px;"
+  data-type="Agent · Exécution" data-name="forge" data-meta="Sonnet · Agent Factory"
+  data-desc="Factory d'agents. Crée, valide et maintient les agents. Vérifie frontmatter, doublons, cohérence. Tout nouvel agent passe par FORGE."
+  data-skills="agent-creation" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">forge</div></div>
+  <div class="agent-role">Agent Factory<br>Création · Validation</div>
+</div>
+
+<div class="node node-agent" id="node-lafouine" style="left:270px;top:726px;"
+  data-type="Agent · Exécution" data-name="lafouine" data-meta="Sonnet · Bibliothécaire"
+  data-desc="Gère la bibliothèque INDEX.md. Indexe les résultats de recherche après chaque deep search par STORM. Maintient la base de connaissance."
+  data-skills="claude-features,vision360" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">lafouine</div></div>
+  <div class="agent-role">Bibliothécaire<br>INDEX.md · Indexation</div>
+</div>
+
+<div class="node node-agent" id="node-standard-executor" style="left:270px;top:848px;"
+  data-type="Agent · Exécution" data-name="standard-executor" data-meta="Sonnet · Workhorse générique"
+  data-desc="Exécuteur générique Sonnet. Tâches courantes, implémentation directe. Le workhorse du système pour les missions moyennes."
+  data-skills="" data-extra="">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">standard-executor</div></div>
+  <div class="agent-role">Workhorse générique<br>Exécution standard</div>
+</div>
+
+<!-- HAIKU SPEED -->
+<div class="node node-agent haiku" id="node-fast-executor" style="left:78px;top:1110px;"
+  data-type="Agent · Vitesse" data-name="fast-executor" data-meta="Haiku · Lecture uniquement"
+  data-desc="Exécuteur ultra-rapide. Haiku uniquement. Limité à Read/Grep/Glob. Pour les tâches de lecture, recherche de fichiers, extraction d'info rapide."
+  data-skills="" data-extra="Read · Grep · Glob uniquement">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">fast-executor</div></div>
+  <div class="agent-role">Lecture · Recherche<br>Read/Grep/Glob only</div>
+</div>
+
+<div class="node node-agent haiku" id="node-rapporteur" style="left:270px;top:1110px;"
+  data-type="Agent · Vitesse" data-name="rapporteur" data-meta="Haiku · Logs système"
+  data-desc="Rédige les logs système et les rapports de session. Alimente system-log. Rapide et économique en tokens."
+  data-skills="" data-extra="system-log · Session reports">
+  <div class="agent-header"><div class="agent-dot"></div><div class="agent-name">rapporteur</div></div>
+  <div class="agent-role">Logs système<br>Session reports</div>
+</div>
+
+<!-- ═══════════════════════ SKILLS RIGHT ═══════════════════════ -->
+
+<!-- PROJECT TYPES -->
+<div class="node node-skill" id="node-s-landing" style="left:1760px;top:108px;"
+  data-type="Skill · Project Type" data-name="project-landing-page" data-meta="Landing pages · Conversion"
+  data-desc="Skill landing page. Patterns de conversion, copywriting, hero sections, social proof, CTAs. Utilisé par DRE et TASHA."
+  data-skills="" data-extra="Agents: dre, tasha">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">project-landing-page</div></div>
+  <div class="skill-type">Landing pages · Conversion</div>
+  <div class="skill-tag">Project Type</div>
+</div>
+
+<div class="node node-skill" id="node-s-ecommerce" style="left:1760px;top:228px;"
+  data-type="Skill · Project Type" data-name="project-ecommerce" data-meta="E-commerce · Boutique"
+  data-desc="Skill e-commerce. Architecture boutique, panier, checkout, Stripe, logistique. Utilisé par TATE pour les projets Power, Nutri7, Cremya."
+  data-skills="" data-extra="Agents: tate">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">project-ecommerce</div></div>
+  <div class="skill-type">E-commerce · Boutique</div>
+  <div class="skill-tag">Project Type</div>
+</div>
+
+<div class="node node-skill" id="node-s-marketing" style="left:1760px;top:348px;"
+  data-type="Skill · Project Type" data-name="project-marketing-strategy" data-meta="Stratégie marketing"
+  data-desc="Skill marketing strategy. Funnels, acquisition, rétention, ads Facebook/TikTok. Utilisé par TASHA pour définir les stratégies de croissance."
+  data-skills="" data-extra="Agents: tasha">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">project-marketing-strategy</div></div>
+  <div class="skill-type">Stratégie marketing</div>
+  <div class="skill-tag">Project Type</div>
+</div>
+
+<div class="node node-skill" id="node-s-branding" style="left:1760px;top:468px;"
+  data-type="Skill · Project Type" data-name="project-branding" data-meta="Identité de marque"
+  data-desc="Skill branding. Charte graphique, design system, guidelines visuelles, naming. Utilisé par DRE et TOMMY."
+  data-skills="" data-extra="Agents: dre, tommy">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">project-branding</div></div>
+  <div class="skill-type">Identité de marque</div>
+  <div class="skill-tag">Project Type</div>
+</div>
+
+<div class="node node-skill" id="node-s-presentation" style="left:1960px;top:108px;"
+  data-type="Skill · Project Type" data-name="project-presentation" data-meta="Decks · Pitches"
+  data-desc="Skill présentation. Decks Notion/Figma, pitch investors, storytelling. Utilisé par TOMMY et GHOST."
+  data-skills="" data-extra="Agents: tommy, ghost">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">project-presentation</div></div>
+  <div class="skill-type">Decks · Pitches</div>
+  <div class="skill-tag">Project Type</div>
+</div>
+
+<div class="node node-skill" id="node-s-formation" style="left:1960px;top:228px;"
+  data-type="Skill · Project Type" data-name="project-formation" data-meta="Cours · Formations"
+  data-desc="Skill formation. Structure pédagogique, contenu dark premium, générateurs interactifs, design system formations ironblock."
+  data-skills="" data-extra="Agents: tasha, dre">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">project-formation</div></div>
+  <div class="skill-type">Cours · Formations</div>
+  <div class="skill-tag">Project Type</div>
+</div>
+
+<!-- KNOWLEDGE -->
+<div class="node node-skill" id="node-s-copywriting" style="left:1760px;top:608px;"
+  data-type="Skill · Knowledge" data-name="copywriting" data-meta="Persuasion · Direct response"
+  data-desc="Skill copywriting. Frameworks AIDA, PAS, Before/After. Tone of voice par univers. Emails, ads, scripts VSL. Utilisé par TASHA principalement."
+  data-skills="" data-extra="Agents: tasha, ghost">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">copywriting</div></div>
+  <div class="skill-type">Persuasion · Direct response</div>
+  <div class="skill-tag">Knowledge</div>
+</div>
+
+<div class="node node-skill" id="node-s-claude-feat" style="left:1760px;top:832px;"
+  data-type="Skill · Knowledge" data-name="claude-features" data-meta="Fonctionnalités Claude"
+  data-desc="Skill Claude features. Connaissance approfondie des capacités, limites, MCP, hooks, agent teams. Utilisé par STORM et LAFOUINE."
+  data-skills="" data-extra="Agents: storm, lafouine">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">claude-features</div></div>
+  <div class="skill-type">Fonctionnalités Claude</div>
+  <div class="skill-tag">Knowledge</div>
+</div>
+
+<!-- SYSTEM -->
+<div class="node node-skill" id="node-s-vision360" style="left:1760px;top:908px;"
+  data-type="Skill · System" data-name="vision360" data-meta="Deep search · Anticipation"
+  data-desc="Skill vision360. Mindset: deep search obligatoire, anticiper, alternatives, autocritique. Le pilier qualité du système. Tout agent doit l'appliquer."
+  data-skills="" data-extra="Agents: ghost, storm, deep-executor">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">vision360</div></div>
+  <div class="skill-type">Deep search · Anticipation</div>
+  <div class="skill-tag">System</div>
+</div>
+
+<div class="node node-skill" id="node-s-focus-process" style="left:1760px;top:1020px;"
+  data-type="Skill · System" data-name="focus-process" data-meta="Process interne Focus"
+  data-desc="Skill focus-process. Workflow interne Focus OS: gates, checkpoints, MEMORY.md, CLAUDE.md hierarchy. Utilisé par GHOST et TATE."
+  data-skills="" data-extra="Agents: ghost, tate">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">focus-process</div></div>
+  <div class="skill-type">Process interne Focus</div>
+  <div class="skill-tag">System</div>
+</div>
+
+<div class="node node-skill" id="node-s-agent-creation" style="left:1960px;top:608px;"
+  data-type="Skill · System" data-name="agent-creation" data-meta="Création d'agents"
+  data-desc="Skill agent-creation. Frontmatter YAML, doublons, cohérence, rôles, models. Utilisé par FORGE pour créer et valider chaque nouvel agent."
+  data-skills="" data-extra="Agents: forge">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">agent-creation</div></div>
+  <div class="skill-type">Création d'agents</div>
+  <div class="skill-tag">System</div>
+</div>
+
+<div class="node node-skill" id="node-s-plan-review" style="left:1960px;top:720px;"
+  data-type="Skill · System" data-name="plan-review" data-meta="Validation de plans"
+  data-desc="Skill plan-review. Checklist de validation des plans avant exécution. Cohérence, risques, alternatives. Utilisé par LIGHT et DEEP-EXECUTOR."
+  data-skills="" data-extra="Agents: light, deep-executor">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">plan-review</div></div>
+  <div class="skill-type">Validation de plans</div>
+  <div class="skill-tag">System</div>
+</div>
+
+<div class="node node-skill" id="node-s-create-new" style="left:1960px;top:832px;"
+  data-type="Skill · System" data-name="create-new" data-meta="Créer ce qui n'existe pas encore"
+  data-desc="Skill create-new. Protocole pour créer un nouvel élément du système (agent, skill, rule, project type) quand il n'existe pas encore. Toujours passer par FORGE pour un agent, LAFOUINE pour un skill."
+  data-skills="" data-extra="Agents: forge, lafouine">
+  <div class="skill-header"><div class="skill-dot"></div><div class="skill-name">create-new</div></div>
+  <div class="skill-type">Créer ce qui n'existe pas</div>
+  <div class="skill-tag">System</div>
+</div>
+
+<!-- ═══════════════════════ HOOKS TOP ═══════════════════════ -->
+
+<div class="node node-hook" style="width:180px;left:480px;top:86px;" id="node-h1"
+  data-type="Hook · PreToolUse" data-name="no-env-guard" data-meta="PreToolUse · Write"
+  data-desc="Bloque l'écriture de secrets dans les fichiers. Détecte les patterns .env, API keys, tokens avant chaque Write tool call."
+  data-skills="" data-extra="">
+  <div class="hook-header"><div class="hook-dot"></div><div class="hook-event">PreToolUse</div></div>
+  <div class="hook-action">Bloque secrets · Write</div>
+  <div class="hook-script">no-env-guard.sh</div>
+</div>
+
+<div class="node node-hook" style="width:180px;left:680px;top:86px;" id="node-h2"
+  data-type="Hook · PostToolUse" data-name="format-on-write" data-meta="PostToolUse · Write"
+  data-desc="Auto-format après chaque Write. Prettier, ESLint fix, trailing whitespace. Garantit la qualité du code généré sans action manuelle."
+  data-skills="" data-extra="">
+  <div class="hook-header"><div class="hook-dot"></div><div class="hook-event">PostToolUse</div></div>
+  <div class="hook-action">Auto-format · Write</div>
+  <div class="hook-script">format-on-write.sh</div>
+</div>
+
+<div class="node node-hook" style="width:186px;left:880px;top:86px;" id="node-h3"
+  data-type="Hook · PostToolUse" data-name="source-date-check" data-meta="PostToolUse · WebSearch"
+  data-desc="Vérifie la date des sources après chaque WebSearch. Alerte si la source est > 6 mois. Enforce Vision360 deep search."
+  data-skills="" data-extra="">
+  <div class="hook-header"><div class="hook-dot"></div><div class="hook-event">PostToolUse</div></div>
+  <div class="hook-action">Date check · WebSearch</div>
+  <div class="hook-script">source-date-check.sh</div>
+</div>
+
+<div class="node node-hook" style="width:160px;left:1086px;top:86px;" id="node-h4"
+  data-type="Hook · PreCompact" data-name="pre-compact" data-meta="PreCompact · Context"
+  data-desc="Se déclenche avant la compression du contexte. Sauvegarde les informations critiques, met à jour MEMORY.md, crée un checkpoint si besoin."
+  data-skills="" data-extra="">
+  <div class="hook-header"><div class="hook-dot"></div><div class="hook-event">PreCompact</div></div>
+  <div class="hook-action">Save context · MEMORY.md</div>
+  <div class="hook-script">pre-compact.sh</div>
+</div>
+
+<div class="node node-hook" style="width:172px;left:1262px;top:86px;" id="node-h5"
+  data-type="Hook · SessionStart" data-name="session-start" data-meta="SessionStart · Reload"
+  data-desc="Reload des learnings au démarrage de session. Compact + reload MEMORY.md + regles globales. Garantit le contexte frais à chaque session."
+  data-skills="" data-extra="">
+  <div class="hook-header"><div class="hook-dot"></div><div class="hook-event">SessionStart</div></div>
+  <div class="hook-action">Compact · Learnings reload</div>
+  <div class="hook-script">session-start.sh</div>
+</div>
+
+<div class="node node-hook" style="width:180px;left:1450px;top:86px;" id="node-h6"
+  data-type="Hook · Stop" data-name="session-end" data-meta="Stop · Session end"
+  data-desc="Fin de session. Sauvegarde les apprentissages (session-learnings.sh) et envoie une notification macOS (notify-done.sh)."
+  data-skills="" data-extra="">
+  <div class="hook-header"><div class="hook-dot"></div><div class="hook-event">Stop</div></div>
+  <div class="hook-action">Learnings + Notification</div>
+  <div class="hook-script">session-learnings + notify</div>
+</div>
+
+<div class="node node-hook" style="width:168px;left:1646px;top:86px;" id="node-h7"
+  data-type="Hook · UserPromptSubmit" data-name="refresh-rules" data-meta="UserPromptSubmit · Rules"
+  data-desc="Refresh des règles à chaque prompt. Garantit que les rules/ sont toujours à jour dans le contexte. Prévient la dérive comportementale."
+  data-skills="" data-extra="">
+  <div class="hook-header"><div class="hook-dot"></div><div class="hook-event">UserPromptSubmit</div></div>
+  <div class="hook-action">Refresh rules globales</div>
+  <div class="hook-script">refresh-rules.sh</div>
+</div>
+
+<!-- ═══════════════════════ PLUGINS BOTTOM ═══════════════════════ -->
+
+<div class="node node-plugin" style="width:126px;left:90px;top:1620px;" id="node-p1"
+  data-type="Plugin" data-name="commit-commands" data-meta="/commit · /commit-push-pr"
+  data-desc="Plugin commit. Commandes /commit et /commit-push-pr pour un workflow git simplifié avec diff + message auto." data-skills="" data-extra="">
+  <div class="plugin-name">commit-commands</div><div class="plugin-desc">/commit · /commit-push-pr</div>
+</div>
+<div class="node node-plugin" style="width:110px;left:226px;top:1620px;" id="node-p2"
+  data-type="Plugin" data-name="code-review" data-meta="/code-review · Multi-agent"
+  data-desc="Plugin review. /code-review lance une review automatique multi-agent avec LIGHT + clone-critic." data-skills="" data-extra="">
+  <div class="plugin-name">code-review</div><div class="plugin-desc">/code-review auto</div>
+</div>
+<div class="node node-plugin" style="width:148px;left:346px;top:1620px;" id="node-p3"
+  data-type="Plugin" data-name="claude-md-management" data-meta="/revise-claude-md"
+  data-desc="Plugin CLAUDE.md. /revise-claude-md pour auditer et maintenir les fichiers de configuration globaux." data-skills="" data-extra="">
+  <div class="plugin-name">claude-md-management</div><div class="plugin-desc">/revise-claude-md</div>
+</div>
+<div class="node node-plugin" style="width:100px;left:504px;top:1620px;" id="node-p4"
+  data-type="Plugin" data-name="playground" data-meta="HTML interactif · Demos"
+  data-desc="Plugin playground. HTML interactif pour prototypage et demos rapides sans déploiement." data-skills="" data-extra="">
+  <div class="plugin-name">playground</div><div class="plugin-desc">HTML demos</div>
+</div>
+<div class="node node-plugin" style="width:88px;left:614px;top:1620px;" id="node-p5"
+  data-type="Plugin" data-name="hookify" data-meta="Gestion hooks"
+  data-desc="Plugin hookify. Création et gestion des hooks Claude (PreToolUse, PostToolUse, etc.) avec templates." data-skills="" data-extra="">
+  <div class="plugin-name">hookify</div><div class="plugin-desc">Gestion hooks</div>
+</div>
+<div class="node node-plugin" style="width:98px;left:712px;top:1620px;" id="node-p6"
+  data-type="Plugin" data-name="safety-net" data-meta="Filet de sécurité"
+  data-desc="Plugin safety-net. Filet de sécurité global — détecte les actions destructives avant qu'elles ne s'exécutent." data-skills="" data-extra="">
+  <div class="plugin-name">safety-net</div><div class="plugin-desc">Filet sécurité</div>
+</div>
+<div class="node node-plugin" style="width:136px;left:820px;top:1620px;" id="node-p7"
+  data-type="Plugin" data-name="security-guidance" data-meta="OWASP · Détection failles"
+  data-desc="Plugin sécurité. Détection des failles OWASP top 10 en temps réel pendant la génération de code." data-skills="" data-extra="">
+  <div class="plugin-name">security-guidance</div><div class="plugin-desc">OWASP · Failles temps réel</div>
+</div>
+
+<div class="node node-plugin" style="width:88px;left:90px;top:1680px;" id="node-p8"
+  data-type="Plugin" data-name="claude-mem" data-meta="Mémoire cross-sessions"
+  data-desc="Plugin mémoire. Mémoire persistante cross-sessions sur localhost:37777. Rappel automatique du contexte." data-skills="" data-extra="">
+  <div class="plugin-name">claude-mem</div><div class="plugin-desc">Cross-session</div>
+</div>
+<div class="node node-plugin" style="width:68px;left:188px;top:1680px;" id="node-p9"
+  data-type="Plugin" data-name="stripe" data-meta="Paiement · Best practices"
+  data-desc="Plugin Stripe. Best practices paiement, debug erreurs, webhooks. Utilisé pour Focus (9.90/mois) et e-commerce." data-skills="" data-extra="">
+  <div class="plugin-name">stripe</div><div class="plugin-desc">Paiements</div>
+</div>
+<div class="node node-plugin" style="width:68px;left:266px;top:1680px;" id="node-p10"
+  data-type="Plugin" data-name="figma" data-meta="Design files · Composants"
+  data-desc="Plugin Figma. Lecture des fichiers Figma, extraction de composants et styles. Utilisé par DRE et TOMMY." data-skills="" data-extra="">
+  <div class="plugin-name">figma</div><div class="plugin-desc">Design files</div>
+</div>
+<div class="node node-plugin" style="width:72px;left:344px;top:1680px;" id="node-p11"
+  data-type="Plugin" data-name="vercel" data-meta="Deploy · Preview"
+  data-desc="Plugin Vercel. Deploy automatique, preview URLs, environment variables. Utilisé par TATE." data-skills="" data-extra="">
+  <div class="plugin-name">vercel</div><div class="plugin-desc">Deploy</div>
+</div>
+<div class="node node-plugin" style="width:84px;left:426px;top:1680px;" id="node-p12"
+  data-type="Plugin" data-name="supabase" data-meta="DB · Auth · Storage"
+  data-desc="Plugin Supabase. Base de données, auth, storage, edge functions. Utilisé par TATE sur tous les projets SaaS." data-skills="" data-extra="">
+  <div class="plugin-name">supabase</div><div class="plugin-desc">DB · Auth</div>
+</div>
+<div class="node node-plugin" style="width:76px;left:520px;top:1680px;" id="node-p13"
+  data-type="Plugin" data-name="github" data-meta="Repos · PRs · Actions"
+  data-desc="Plugin GitHub. Gestion repos, pull requests, GitHub Actions. Intégré avec gh CLI." data-skills="" data-extra="">
+  <div class="plugin-name">github</div><div class="plugin-desc">Repos · PRs</div>
+</div>
+<div class="node node-plugin" style="width:136px;left:606px;top:1680px;" id="node-p14"
+  data-type="Plugin" data-name="adversarial-spec" data-meta="Specs · Anti-régression"
+  data-desc="Plugin specs adversariales. Génère des specs qui challengent le code — anti-régression proactif." data-skills="" data-extra="">
+  <div class="plugin-name">adversarial-spec</div><div class="plugin-desc">Specs · Anti-régression</div>
+</div>
+<div class="node node-plugin" style="width:68px;left:752px;top:1680px;" id="node-p15"
+  data-type="Plugin" data-name="mgrep" data-meta="Semantic search · Code"
+  data-desc="Plugin mgrep. Recherche sémantique dans le code et sur le web. PRIORITAIRE sur Grep/Glob." data-skills="" data-extra="">
+  <div class="plugin-name">mgrep</div><div class="plugin-desc">Semantic search</div>
+</div>
+
+<!-- ═══════════════════════ MCP SERVERS ═══════════════════════ -->
+
+<div class="node node-mcp" style="width:160px;left:1300px;top:1620px;" id="node-mcp1"
+  data-type="MCP Server" data-name="Playwright" data-meta="Browser automation · E2E"
+  data-desc="MCP Playwright. Browser automation, screenshots, tests E2E. Remplace AppleScript pour les interactions web complexes." data-skills="" data-extra="">
+  <div class="mcp-name">Playwright</div><div class="mcp-desc">Browser automation · E2E</div>
+</div>
+<div class="node node-mcp" style="width:148px;left:1474px;top:1620px;" id="node-mcp2"
+  data-type="MCP Server" data-name="Context7" data-meta="Docs · Librairies"
+  data-desc="MCP Context7. Documentation à jour des librairies (React, Next.js, Tailwind, etc.). Évite les hallucinations sur les APIs." data-skills="" data-extra="">
+  <div class="mcp-name">Context7</div><div class="mcp-desc">Docs · Librairies up-to-date</div>
+</div>
+<div class="node node-mcp" style="width:166px;left:1636px;top:1620px;" id="node-mcp3"
+  data-type="MCP Server" data-name="Chrome DevTools" data-meta="Debug · Performance"
+  data-desc="MCP Chrome DevTools. Debug runtime, analyse performance, inspection DOM, profiling JS. Utilisé par DRE pour optimisation frontend." data-skills="" data-extra="">
+  <div class="mcp-name">Chrome DevTools</div><div class="mcp-desc">Debug · Performance</div>
+</div>
+
+<!-- ═══════════════════════ RULES (coin haut-gauche) ═══════════════════════ -->
+
+<!-- Handled by section label at top of agents -->
+
+<!-- ═══════════════════════ PROFILES (bas-gauche) ═══════════════════════ -->
+
+<div class="node node-profiles" style="left:78px;top:1260px;" id="node-profiles"
+  data-type="System" data-name="Profiles Claude" data-meta="Modes contextuels · 5 profils"
+  data-desc="Profils qui adaptent le comportement de Claude selon le contexte du projet." data-skills="" data-extra="">
+  <div class="profiles-title">Profils</div>
+  <div class="profile-list">
+    <span class="profile-tag">dev</span>
+    <span class="profile-tag">designer</span>
+    <span class="profile-tag">ceo</span>
+    <span class="profile-tag">marketing</span>
+    <span class="profile-tag">student</span>
+  </div>
+</div>
+
+<!-- RULES GROUP -->
+<div class="node node-rules" style="left:270px;top:1178px;" id="node-rules"
+  data-type="System" data-name="Rules globales" data-meta="~/.claude/rules/ · alwaysApply"
+  data-desc="5 fichiers de règles chargés à chaque session. Définissent l'identité, le workflow, les outils, les business et le mindset Vision360."
+  data-skills="" data-extra="">
+  <div class="rules-title">Rules — alwaysApply</div>
+  <div class="rule-entry">identity.md <span class="always">✓</span></div>
+  <div class="rule-entry">workflow.md <span class="always">✓</span></div>
+  <div class="rule-entry">learnings.md <span class="always">✓</span></div>
+  <div class="rule-entry">vision360.md</div>
+  <div class="rule-entry">tools.md</div>
+  <div class="rule-entry">businesses.md</div>
+</div>
+
+<!-- ═══════════════════════ CREATE NEW BLOCK ═══════════════════════ -->
+
+<div class="section-label" style="left:1940px;top:960px;">Extensibilité · Créer</div>
+
+<div class="node node-create-new" id="node-create-new" style="left:1940px;top:985px;"
+  data-type="System · Extensibilité" data-name="CREATE NEW" data-meta="Le système est extensible · Toujours vivant"
+  data-desc="Protocole pour créer de nouveaux éléments du système. Chaque ajout renforce le tout. Forge valide les agents, Lafouine indexe les skills, Ghost orchestre les nouveaux types de projets."
+  data-skills="create-new,agent-creation" data-extra="Forge · Lafouine · Ghost · rules/">
+  <div class="create-new-title">Create New</div>
+  <div class="create-new-item">
+    <div class="create-new-icon">+</div>
+    <div class="create-new-label">
+      New Agent
+      <div class="create-new-via">via Forge</div>
+    </div>
+  </div>
+  <div class="create-new-item">
+    <div class="create-new-icon">+</div>
+    <div class="create-new-label">
+      New Skill
+      <div class="create-new-via">via Lafouine</div>
+    </div>
+  </div>
+  <div class="create-new-item">
+    <div class="create-new-icon">+</div>
+    <div class="create-new-label">
+      New Project Type
+      <div class="create-new-via">via Ghost + Forge + Lafouine</div>
+    </div>
+  </div>
+  <div class="create-new-item">
+    <div class="create-new-icon">+</div>
+    <div class="create-new-label">
+      New Rule
+      <div class="create-new-via">directement dans rules/</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end canvas -->
+</div><!-- end canvas-wrap -->
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+
+// Connection definitions: [fromId, toId, colorClass]
+const connections = [
+  // CLAUDE.md ↔ AGENTS (via ghost mainly)
+  ['node-claudemd', 'node-ghost', 'v'],
+  ['node-claudemd', 'node-rules', 'w'],
+  ['node-claudemd', 'node-index', 'c'],
+
+  // GHOST → ALL strategic
+  ['node-ghost', 'node-deep-executor', 'v'],
+  ['node-ghost', 'node-opus-orchestrator', 'v'],
+  ['node-ghost', 'node-dre', 'v'],
+  ['node-ghost', 'node-tate', 'v'],
+  ['node-ghost', 'node-tasha', 'v'],
+  ['node-ghost', 'node-storm', 'v'],
+  ['node-ghost', 'node-light', 'v'],
+  ['node-ghost', 'node-forge', 'v'],
+  ['node-ghost', 'node-lafouine', 'v'],
+
+  // OPUS-ORCHESTRATOR → executors
+  ['node-opus-orchestrator', 'node-standard-executor', 'v'],
+  ['node-opus-orchestrator', 'node-fast-executor', 'v'],
+  ['node-opus-orchestrator', 'node-rapporteur', 'v'],
+
+  // AGENTS → SKILLS
+  ['node-deep-executor', 'node-s-plan-review', 'v'],
+  ['node-deep-executor', 'node-s-vision360', 'v'],
+  ['node-dre', 'node-s-landing', 'c'],
+  ['node-dre', 'node-s-branding', 'c'],
+  ['node-tate', 'node-s-ecommerce', 'c'],
+  ['node-tate', 'node-s-focus-process', 'c'],
+  ['node-tasha', 'node-s-copywriting', 'c'],
+  ['node-tasha', 'node-s-marketing', 'c'],
+  ['node-tommy', 'node-s-branding', 'c'],
+  ['node-tommy', 'node-s-presentation', 'c'],
+  ['node-storm', 'node-s-vision360', 'c'],
+  ['node-storm', 'node-s-claude-feat', 'c'],
+  ['node-light', 'node-s-plan-review', 'c'],
+  ['node-forge', 'node-s-agent-creation', 'c'],
+  ['node-forge', 'node-s-create-new', 'g'],
+  ['node-lafouine', 'node-s-create-new', 'g'],
+  ['node-lafouine', 'node-s-claude-feat', 'c'],
+  ['node-ghost', 'node-s-vision360', 'c'],
+  ['node-ghost', 'node-s-focus-process', 'c'],
+
+  // AGENTS → INDEX
+  ['node-lafouine', 'node-index', 'c'],
+  ['node-storm', 'node-index', 'c'],
+
+  // INDEX → SKILLS hub
+  ['node-index', 'node-s-vision360', 'c'],
+  ['node-index', 'node-s-agent-creation', 'c'],
+  ['node-index', 'node-s-plan-review', 'c'],
+  ['node-index', 'node-s-focus-process', 'c'],
+  ['node-index', 'node-s-copywriting', 'c'],
+
+  // HOOKS → CLAUDE.md
+  ['node-h1', 'node-claudemd', 'g'],
+  ['node-h2', 'node-claudemd', 'g'],
+  ['node-h3', 'node-claudemd', 'g'],
+  ['node-h4', 'node-claudemd', 'g'],
+  ['node-h5', 'node-claudemd', 'g'],
+  ['node-h6', 'node-claudemd', 'g'],
+  ['node-h7', 'node-claudemd', 'g'],
+
+  // PLUGINS → CLAUDE.md
+  ['node-p1', 'node-claudemd', 'r'],
+  ['node-p4', 'node-claudemd', 'r'],
+  ['node-p7', 'node-claudemd', 'r'],
+  ['node-mgrep', 'node-claudemd', 'r'],
+
+  // MCP → AGENTS
+  ['node-mcp1', 'node-tate', 'gr'],
+  ['node-mcp2', 'node-dre', 'gr'],
+  ['node-mcp2', 'node-tate', 'gr'],
+  ['node-mcp3', 'node-dre', 'gr'],
+
+  // PLUGINS specific
+  ['node-p2', 'node-light', 'r'],
+  ['node-p10', 'node-dre', 'r'],
+  ['node-p10', 'node-tommy', 'r'],
+  ['node-p11', 'node-tate', 'r'],
+  ['node-p12', 'node-tate', 'r'],
+  ['node-p5', 'node-h1', 'r'],
+
+  // RULES → CLAUDE.md
+  ['node-rules', 'node-claudemd', 'w'],
+
+  // CREATE NEW block → agents + skill
+  ['node-create-new', 'node-forge', 'g'],
+  ['node-create-new', 'node-lafouine', 'g'],
+  ['node-create-new', 'node-ghost', 'g'],
+  ['node-create-new', 'node-s-create-new', 'g'],
+];
+
+// ─── ZOOM / PAN ─────────────────────────────────────────────────────────────
+
+const wrap = document.getElementById('canvas-wrap');
+const canvas = document.getElementById('canvas');
+let scale = 0.52, tx = 0, ty = 0;
+let isDragging = false, startX = 0, startY = 0, startTx = 0, startTy = 0;
+
+function applyTransform() {
+  canvas.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+  document.getElementById('zoom-label').textContent = Math.round(scale * 100) + '%';
+}
+
+function centerCanvas() {
+  const ww = wrap.offsetWidth, wh = wrap.offsetHeight;
+  tx = (ww - 2600 * scale) / 2;
+  ty = (wh - 1900 * scale) / 2;
+  applyTransform();
+}
+
+window.addEventListener('load', () => { setTimeout(centerCanvas, 50); drawConnections(); });
+
+wrap.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const rect = wrap.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const prevScale = scale;
+  scale = Math.min(2, Math.max(0.2, scale - e.deltaY * 0.001));
+  tx = mx - (mx - tx) * (scale / prevScale);
+  ty = my - (my - ty) * (scale / prevScale);
+  applyTransform();
+}, { passive: false });
+
+wrap.addEventListener('mousedown', (e) => {
+  if (e.target.closest('.node') || e.target.closest('#panel')) return;
+  isDragging = true; startX = e.clientX; startY = e.clientY; startTx = tx; startTy = ty;
+  wrap.classList.add('dragging');
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  tx = startTx + (e.clientX - startX); ty = startTy + (e.clientY - startY);
+  applyTransform();
+});
+window.addEventListener('mouseup', () => { isDragging = false; wrap.classList.remove('dragging'); });
+
+document.getElementById('btn-zoomin').onclick = () => {
+  const ww = wrap.offsetWidth, wh = wrap.offsetHeight;
+  const cx = ww/2, cy = wh/2;
+  const prev = scale; scale = Math.min(2, scale + 0.1);
+  tx = cx - (cx - tx) * (scale/prev); ty = cy - (cy - ty) * (scale/prev); applyTransform();
+};
+document.getElementById('btn-zoomout').onclick = () => {
+  const ww = wrap.offsetWidth, wh = wrap.offsetHeight;
+  const cx = ww/2, cy = wh/2;
+  const prev = scale; scale = Math.max(0.2, scale - 0.1);
+  tx = cx - (cx - tx) * (scale/prev); ty = cy - (cy - ty) * (scale/prev); applyTransform();
+};
+document.getElementById('btn-reset').onclick = centerCanvas;
+
+// ─── SVG CONNECTIONS ────────────────────────────────────────────────────────
+
+function getCenter(el) {
+  return {
+    x: el.offsetLeft + el.offsetWidth / 2,
+    y: el.offsetTop + el.offsetHeight / 2
+  };
+}
+
+function drawConnections() {
+  const svg = document.getElementById('svg-lines');
+  svg.innerHTML = '';
+  connections.forEach(([fromId, toId, cls], idx) => {
+    const from = document.getElementById(fromId);
+    const to = document.getElementById(toId);
+    if (!from || !to) return;
+    const a = getCenter(from), b = getCenter(to);
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const cx1 = a.x + dx * 0.4, cy1 = a.y;
+    const cx2 = b.x - dx * 0.4, cy2 = b.y;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M ${a.x} ${a.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${b.x} ${b.y}`);
+    path.setAttribute('class', `conn-line ${cls}`);
+    path.setAttribute('data-from', fromId);
+    path.setAttribute('data-to', toId);
+    path.style.animationDelay = `${(idx * 0.3) % 3}s`;
+    svg.appendChild(path);
+  });
+}
+
+// ─── PANEL ──────────────────────────────────────────────────────────────────
+
+const panel = document.getElementById('panel');
+const panelType = document.getElementById('panel-type');
+const panelName = document.getElementById('panel-name');
+const panelMeta = document.getElementById('panel-meta');
+const panelBody = document.getElementById('panel-body');
+
+document.getElementById('panel-close').onclick = () => {
+  panel.classList.remove('visible');
+  clearHighlight();
+};
+
+function showPanel(el) {
+  const type = el.dataset.type || '';
+  const name = el.dataset.name || '';
+  const meta = el.dataset.meta || '';
+  const desc = el.dataset.desc || '';
+  const skills = el.dataset.skills || '';
+  const extra = el.dataset.extra || '';
+
+  panelType.textContent = type;
+  panelName.textContent = name;
+  panelMeta.textContent = meta;
+
+  let html = `<p style="color:var(--muted);font-size:11px;line-height:1.7;">${desc}</p>`;
+
+  if (skills) {
+    html += `<div class="pb-label">Skills utilisés</div>`;
+    skills.split(',').forEach(s => {
+      html += `<span class="pb-tag c">${s.trim()}</span>`;
+    });
+  }
+  if (extra) {
+    html += `<div class="pb-label">Détails</div>`;
+    extra.split('|').forEach(e => {
+      const trimmed = e.trim();
+      if (trimmed) html += `<span class="pb-tag v">${trimmed}</span>`;
+    });
+  }
+
+  panelBody.innerHTML = html;
+  panel.classList.add('visible');
+}
+
+// ─── HIGHLIGHT ──────────────────────────────────────────────────────────────
+
+let activeNodeId = null;
+
+function clearHighlight() {
+  activeNodeId = null;
+  document.querySelectorAll('.node').forEach(n => {
+    n.classList.remove('highlighted', 'faded');
+  });
+  document.querySelectorAll('.conn-line').forEach(l => {
+    l.classList.remove('highlighted', 'faded');
+  });
+}
+
+function highlightNode(nodeId) {
+  if (activeNodeId === nodeId) {
+    clearHighlight(); panel.classList.remove('visible'); return;
+  }
+  activeNodeId = nodeId;
+  const connectedIds = new Set([nodeId]);
+  document.querySelectorAll('.conn-line').forEach(l => {
+    const from = l.dataset.from, to = l.dataset.to;
+    if (from === nodeId || to === nodeId) {
+      connectedIds.add(from); connectedIds.add(to);
+      l.classList.add('highlighted'); l.classList.remove('faded');
+    } else {
+      l.classList.add('faded'); l.classList.remove('highlighted');
+    }
+  });
+  document.querySelectorAll('.node').forEach(n => {
+    if (connectedIds.has(n.id)) {
+      n.classList.add('highlighted'); n.classList.remove('faded');
+    } else {
+      n.classList.add('faded'); n.classList.remove('highlighted');
+    }
+  });
+}
+
+document.querySelectorAll('.node').forEach(node => {
+  node.addEventListener('click', (e) => {
+    e.stopPropagation();
+    highlightNode(node.id);
+    showPanel(node);
+  });
+});
+
+wrap.addEventListener('click', () => {
+  clearHighlight();
+  panel.classList.remove('visible');
+});
+
+// ─── TOUCH (basique) ────────────────────────────────────────────────────────
+let lastTouchDist = 0;
+wrap.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 2) {
+    lastTouchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  } else if (e.touches.length === 1) {
+    isDragging = true;
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+    startTx = tx; startTy = ty;
+  }
+}, { passive: true });
+wrap.addEventListener('touchmove', (e) => {
+  if (e.touches.length === 2) {
+    const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    scale = Math.min(2, Math.max(0.2, scale * (dist / lastTouchDist)));
+    lastTouchDist = dist; applyTransform();
+  } else if (e.touches.length === 1 && isDragging) {
+    tx = startTx + (e.touches[0].clientX - startX);
+    ty = startTy + (e.touches[0].clientY - startY);
+    applyTransform();
+  }
+}, { passive: true });
+wrap.addEventListener('touchend', () => { isDragging = false; });
+</script>
+</body>
+</html>

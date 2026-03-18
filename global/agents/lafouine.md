@@ -10,7 +10,6 @@ tools:
   - Bash
   - WebSearch
   - WebFetch
-model: sonnet
 memory: user
 ---
 

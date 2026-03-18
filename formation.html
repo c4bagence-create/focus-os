@@ -113,9 +113,6 @@ p{color:var(--text-dim);line-height:1.75}
 .agent-example{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:6px;padding:.75rem 1rem;font-size:.78rem;color:var(--text-dim);margin-bottom:.75rem;font-family:'SF Mono','Fira Code',monospace}
 .agent-tags{display:flex;gap:.5rem;flex-wrap:wrap}
 .tag{padding:.25rem .65rem;background:var(--bg3);border:1px solid var(--border);border-radius:100px;font-size:.7rem;color:var(--text-muted);font-weight:500}
-.tag.opus{border-color:rgba(245,158,11,0.4);color:var(--gold-light)}
-.tag.sonnet{border-color:rgba(124,58,237,0.4);color:var(--violet-light)}
-.tag.haiku{border-color:rgba(6,182,212,0.4);color:var(--cyan-light)}
 /* PROJECT TYPES */
 .project-types{margin-top:2.5rem}
 .project-type{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1rem;overflow:hidden;cursor:pointer;transition:border-color .3s}
@@ -225,6 +222,15 @@ p{color:var(--text-dim);line-height:1.75}
 .feature-list{margin-top:.75rem;list-style:none}
 .feature-list li{font-size:.78rem;color:var(--text-muted);padding:.25rem 0 .25rem 1.25rem;position:relative}
 .feature-list li::before{content:'→';position:absolute;left:0;color:var(--violet-light);font-size:.7rem}
+/* EXTEND SECTION */
+.extend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:2.5rem}
+.extend-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;transition:border-color .3s,transform .3s;position:relative;overflow:hidden}
+.extend-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--cyan))}
+.extend-card:hover{border-color:var(--border-hover);transform:translateY(-2px)}
+.extend-plus{width:40px;height:40px;background:var(--glow-v);border:1px solid rgba(124,58,237,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:1rem}
+.extend-card h3{font-size:.95rem;margin-bottom:.4rem}
+.extend-card p{font-size:.8rem;color:var(--text-muted);line-height:1.6;margin-bottom:.75rem}
+.extend-agent{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .7rem;background:var(--bg3);border:1px solid rgba(124,58,237,0.3);border-radius:100px;font-size:.72rem;color:var(--violet-light);font-weight:600}
 footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;max-width:1100px;margin:0 auto}
 .footer-logo{font-size:1rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:linear-gradient(135deg,var(--violet-light),var(--cyan-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
 .footer-sub{font-size:.78rem;color:var(--text-muted)}
@@ -232,6 +238,56 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;ma
 ::-webkit-scrollbar-track{background:var(--bg2)}
 ::-webkit-scrollbar-thumb{background:rgba(124,58,237,0.4);border-radius:3px}
 @media(max-width:768px){section{padding:5rem 1.25rem}.hero-stats{gap:2rem}.agents-grid{grid-template-columns:1fr}}
+/* BEGINNER GUIDE */
+.bg-intro{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:2.5rem 0}
+@media(max-width:700px){.bg-intro{grid-template-columns:1fr}}
+.bg-before,.bg-after{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem}
+.bg-before{border-top:2px solid #ef4444}
+.bg-after{border-top:2px solid #22c55e}
+.bg-col-label{display:flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+.bg-before .bg-col-label{color:#ef4444}
+.bg-after .bg-col-label{color:#22c55e}
+.bg-col-item{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.82rem;color:var(--text-dim)}
+.bg-col-item:last-child{border-bottom:none}
+.bg-col-item .dot{width:6px;height:6px;border-radius:50%;margin-top:.45rem;flex-shrink:0}
+.bg-before .dot{background:#ef4444}
+.bg-after .dot{background:#22c55e}
+.rules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin:2rem 0}
+.rule-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
+.rule-card:hover{transform:translateY(-2px);border-color:var(--border-hover)}
+.rule-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--cyan))}
+.rule-num{font-size:.7rem;font-weight:800;color:var(--violet-light);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+.rule-card h3{font-size:.95rem;font-weight:700;margin-bottom:.75rem}
+.rule-bad{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:.6rem .85rem;font-size:.78rem;color:#fca5a5;font-family:'SF Mono','Fira Code',monospace;margin-bottom:.5rem}
+.rule-good{background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:.6rem .85rem;font-size:.78rem;color:#86efac;font-family:'SF Mono','Fira Code',monospace;margin-bottom:.5rem}
+.rule-note{font-size:.75rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5}
+.checklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:2rem 0}
+@media(max-width:700px){.checklist-grid{grid-template-columns:1fr}}
+.checklist-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem}
+.checklist-block h3{font-size:.9rem;font-weight:700;margin-bottom:1rem;color:var(--text)}
+.checklist-item{display:flex;align-items:flex-start;gap:.75rem;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:.82rem;color:var(--text-dim)}
+.checklist-item:last-child{border-bottom:none}
+.check-box{width:16px;height:16px;border:1px solid var(--violet);border-radius:4px;flex-shrink:0;margin-top:.1rem;display:flex;align-items:center;justify-content:center;background:rgba(124,58,237,0.08)}
+.check-inner{width:8px;height:8px;background:var(--violet-light);border-radius:2px}
+.examples-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.75rem;margin:2rem 0}
+.example-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;align-items:flex-start;gap:.85rem;transition:border-color .2s,transform .2s}
+.example-item:hover{border-color:var(--border-hover);transform:translateY(-2px)}
+.example-time{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);border-radius:6px;padding:.25rem .6rem;font-size:.7rem;font-weight:700;color:var(--cyan-light);white-space:nowrap;flex-shrink:0;margin-top:.1rem}
+.example-text{font-size:.82rem;color:var(--text-dim);line-height:1.5}
+.fail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin:2rem 0}
+.fail-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem}
+.fail-problem{font-size:.82rem;font-weight:700;color:#fca5a5;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.fail-problem::before{content:'';width:6px;height:6px;border-radius:50%;background:#ef4444;flex-shrink:0}
+.fail-fix{font-size:.8rem;color:var(--text-dim);display:flex;align-items:flex-start;gap:.5rem;padding-top:.5rem;border-top:1px solid var(--border)}
+.fail-fix::before{content:'→';color:#22c55e;flex-shrink:0;font-weight:700}
+.routine-timeline{margin:2rem 0;position:relative;padding-left:3rem}
+.routine-timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--violet),var(--cyan),transparent)}
+.rt-step{display:flex;align-items:flex-start;gap:1.25rem;margin-bottom:1.25rem;position:relative}
+.rt-dot{width:42px;height:42px;background:var(--bg2);border:1px solid var(--violet);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;color:var(--violet-light);flex-shrink:0;position:absolute;left:-3rem;z-index:1}
+.rt-content{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;flex:1}
+.rt-content h4{font-size:.88rem;font-weight:700;margin-bottom:.2rem;color:var(--text)}
+.rt-content p{font-size:.78rem;color:var(--text-muted);margin:0}
+.rt-code{display:inline-block;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:.1rem .5rem;font-family:'SF Mono','Fira Code',monospace;font-size:.75rem;color:var(--cyan-light);margin-top:.3rem}
 </style>
 </head>
 <body>
@@ -241,6 +297,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;ma
 <nav>
   <div class="nav-logo">Focus OS</div>
   <ul class="nav-links">
+    <li><a href="#beginner-guide">Guide debutant</a></li>
     <li><a href="#think">Comment ca pense</a></li>
     <li><a href="#agents">Agents</a></li>
     <li><a href="#projects">Workflows</a></li>
@@ -248,6 +305,7 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;ma
     <li><a href="#library">Library</a></li>
     <li><a href="#start">Premiers pas</a></li>
     <li><a href="#advanced">Avance</a></li>
+    <li><a href="#extend">Etendre</a></li>
   </ul>
 </nav>
 
@@ -268,6 +326,192 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;ma
     <div class="hero-stat"><div class="num">10+</div><div class="label">Skills & Plugins</div></div>
     <div class="hero-stat"><div class="num">6</div><div class="label">Workflows prets</div></div>
     <div class="hero-stat"><div class="num">0</div><div class="label">Ligne de code a ecrire</div></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- GUIDE DEBUTANT -->
+<section id="beginner-guide">
+  <div class="section-label reveal">Guide Debutant</div>
+  <h2 class="reveal">Travailler avec l'IA</h2>
+  <p class="reveal reveal-delay-1">La section la plus importante si tu pars de zero. Lis ca avant tout le reste.</p>
+
+  <!-- 1. AVANT / MAINTENANT -->
+  <h3 class="reveal" style="margin:3rem 0 .5rem;font-size:1.1rem;color:var(--text)">1 — Ce qui change fondamentalement</h3>
+  <p class="reveal reveal-delay-1" style="margin-bottom:1.5rem">Tu ne travailles plus seul. Tu diriges une equipe. Le shift mental, c'est ca.</p>
+  <div class="bg-intro reveal reveal-delay-2">
+    <div class="bg-before">
+      <div class="bg-col-label">&#10007; Avant — Tu fais tout</div>
+      <div class="bg-col-item"><span class="dot"></span>Tu cherches toi-meme les infos</div>
+      <div class="bg-col-item"><span class="dot"></span>Tu ecris chaque mot</div>
+      <div class="bg-col-item"><span class="dot"></span>Tu codes (ou tu paies quelqu'un)</div>
+      <div class="bg-col-item"><span class="dot"></span>Tu designes chaque element</div>
+      <div class="bg-col-item"><span class="dot"></span>1 personne, 1 tache a la fois</div>
+      <div class="bg-col-item"><span class="dot"></span>Disponible 9h-18h</div>
+    </div>
+    <div class="bg-after">
+      <div class="bg-col-label">&#10003; Maintenant — Tu diriges</div>
+      <div class="bg-col-item"><span class="dot"></span>Storm cherche, tu valides</div>
+      <div class="bg-col-item"><span class="dot"></span>Tasha ecrit, tu affines</div>
+      <div class="bg-col-item"><span class="dot"></span>DRE + Tate codent en parallele</div>
+      <div class="bg-col-item"><span class="dot"></span>Tommy genere l'identite complete</div>
+      <div class="bg-col-item"><span class="dot"></span>9 agents, taches simultanées</div>
+      <div class="bg-col-item"><span class="dot"></span>Disponible 24/7, jamais fatigue</div>
+    </div>
+  </div>
+  <div class="pill reveal" style="background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.25)">
+    <div class="pill-icon violet">&#128161;</div>
+    <div class="pill-text"><h4>La regle d'or</h4><p>Tu ne tapes pas du code. Tu ne cherches pas sur Google. Tu decris ce que tu veux, l'IA execute, tu valides et tu corriges. Ton boulot = <strong style="color:var(--text)">donner la direction.</strong></p></div>
+  </div>
+
+  <!-- 2. LES 5 REGLES D'OR DU PROMPT -->
+  <h3 class="reveal" style="margin:3rem 0 .5rem;font-size:1.1rem;color:var(--text)">2 — Comment parler a l'IA</h3>
+  <p class="reveal reveal-delay-1" style="margin-bottom:1.5rem">La qualite de ta commande = la qualite du resultat. Ces 5 regles font toute la difference.</p>
+  <div class="rules-grid">
+    <div class="rule-card reveal">
+      <div class="rule-num">Regle 01</div>
+      <h3>Sois PRECIS</h3>
+      <div class="rule-bad">&#10007; "Fais-moi un site"</div>
+      <div class="rule-good">&#10003; "Cree une landing page pour une app de meditation. Cible: hommes 30-45 ans stresses. Style: dark premium minimaliste. 1 hero, 3 sections benefices, 1 CTA."</div>
+      <p class="rule-note">Plus c'est specifique, moins il y a d'allers-retours.</p>
+    </div>
+    <div class="rule-card reveal reveal-delay-1">
+      <div class="rule-num">Regle 02</div>
+      <h3>Donne du CONTEXTE</h3>
+      <div class="rule-bad">&#10007; "Ecris un email"</div>
+      <div class="rule-good">&#10003; "Ecris un email de bienvenue pour un nouvel abonne a ma newsletter sur la productivite. Ton: direct et amical. Objectif: qu'il ouvre le prochain email."</div>
+      <p class="rule-note">Qui est la cible, quel est l'objectif, quel ton.</p>
+    </div>
+    <div class="rule-card reveal reveal-delay-2">
+      <div class="rule-num">Regle 03</div>
+      <h3>Dis ce que tu NE VEUX PAS</h3>
+      <div class="rule-good">&#10003; "Pas de jargon technique"</div>
+      <div class="rule-good">&#10003; "Pas de couleurs vives, que du dark"</div>
+      <div class="rule-good">&#10003; "Pas plus de 3 paragraphes"</div>
+      <p class="rule-note">Les contraintes negatives sont aussi importantes que les positives.</p>
+    </div>
+    <div class="rule-card reveal reveal-delay-3">
+      <div class="rule-num">Regle 04</div>
+      <h3>Donne des EXEMPLES</h3>
+      <div class="rule-good">&#10003; "Inspire du style de Stripe.com"</div>
+      <div class="rule-good">&#10003; "Comme l'email de bienvenue de Notion"</div>
+      <div class="rule-good">&#10003; "Meme structure que [reference]"</div>
+      <p class="rule-note">Une reference vaut mille mots. L'IA connait les grandes marques.</p>
+    </div>
+    <div class="rule-card reveal reveal-delay-4">
+      <div class="rule-num">Regle 05</div>
+      <h3>ITERE, ne recommence pas</h3>
+      <div class="rule-bad">&#10007; "Refais tout" / "C'est moche"</div>
+      <div class="rule-good">&#10003; "Le titre est trop long, raccourcis a 6 mots"</div>
+      <div class="rule-good">&#10003; "Augmente le contraste et agrandis le CTA"</div>
+      <p class="rule-note">Feedback precis = correction precise. Recommencer = perdre du temps.</p>
+    </div>
+  </div>
+
+  <!-- 3. CHECKLISTS -->
+  <h3 class="reveal" style="margin:3rem 0 .5rem;font-size:1.1rem;color:var(--text)">3 — Quoi verifier</h3>
+  <p class="reveal reveal-delay-1" style="margin-bottom:1.5rem">Deux checklists. La premiere apres chaque resultat. La seconde pour bien demarrer.</p>
+  <div class="checklist-grid reveal reveal-delay-2">
+    <div class="checklist-block">
+      <h3>Apres chaque resultat</h3>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Le resultat correspond a ce que j'ai demande ?</div>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Pas d'erreurs factuelles ?</div>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Le ton est celui que je voulais ?</div>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>C'est utilisable en l'etat ou ca doit etre corrige ?</div>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Si c'est du code: est-ce que ca tourne ? (demande a Light de tester)</div>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Si c'est du texte: est-ce que c'est naturel ? (lis-le a voix haute)</div>
+    </div>
+    <div class="checklist-block">
+      <h3>Installation debutant</h3>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Ton CLAUDE.md est personnalise (business, style, preferences)</div>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Tu as teste chaque agent au moins une fois</div>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Tu as lance au moins 1 projet type (landing page, branding)</div>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Tu sais faire /commit pour sauvegarder ton travail</div>
+      <div class="checklist-item"><div class="check-box"><div class="check-inner"></div></div>Tu connais Vision360 (deep search avant toute decision)</div>
+    </div>
+  </div>
+
+  <!-- 4. CE QUE TU PEUX FAIRE -->
+  <h3 class="reveal" style="margin:3rem 0 .5rem;font-size:1.1rem;color:var(--text)">4 — Ce que tu peux faire avec Focus OS</h3>
+  <p class="reveal reveal-delay-1" style="margin-bottom:1.5rem">Concret. Pas de theorie.</p>
+  <div class="examples-list reveal reveal-delay-2">
+    <div class="example-item"><span class="example-time">30 min</span><div class="example-text">Creer une landing page complete avec copy, design et deploy</div></div>
+    <div class="example-item"><span class="example-time">15 min</span><div class="example-text">Ecrire 10 emails marketing sequences</div></div>
+    <div class="example-item"><span class="example-time">10 min</span><div class="example-text">Analyser 5 concurrents avec sources et recommandation</div></div>
+    <div class="example-item"><span class="example-time">1 heure</span><div class="example-text">Creer une identite visuelle complete — logo, palette, typo, charte</div></div>
+    <div class="example-item"><span class="example-time">5 min</span><div class="example-text">Auditer la securite d'un site ou d'un code</div></div>
+    <div class="example-item"><span class="example-time">1 session</span><div class="example-text">Planifier le lancement d'un produit de A a Z</div></div>
+    <div class="example-item"><span class="example-time">20 min</span><div class="example-text">Generer un script video + hooks + CTA + description YouTube</div></div>
+    <div class="example-item"><span class="example-time">45 min</span><div class="example-text">Configurer une base de donnees Supabase avec auth et politiques</div></div>
+  </div>
+
+  <!-- 5. CE QUE L'IA FAIT MAL -->
+  <h3 class="reveal" style="margin:3rem 0 .5rem;font-size:1.1rem;color:var(--text)">5 — Ce que l'IA fait mal</h3>
+  <p class="reveal reveal-delay-1" style="margin-bottom:1.5rem">L'IA n'est pas infaillible. Connaitre ses limites te permet de corriger avant que ca pose probleme.</p>
+  <div class="fail-grid reveal reveal-delay-2">
+    <div class="fail-card">
+      <div class="fail-problem">Inventer des faits</div>
+      <div class="fail-fix">Demande toujours les sources. Si pas sur → "Verifie sur internet avant de repondre"</div>
+    </div>
+    <div class="fail-card">
+      <div class="fail-problem">Etre trop generique</div>
+      <div class="fail-fix">Donne plus de contexte, des exemples concrets, des references</div>
+    </div>
+    <div class="fail-card">
+      <div class="fail-problem">Se perdre dans les details</div>
+      <div class="fail-fix">"Resumeresume en 5 points max, va droit au but"</div>
+    </div>
+    <div class="fail-card">
+      <div class="fail-problem">Oublier le contexte entre sessions</div>
+      <div class="fail-fix">Ton CLAUDE.md est la pour ca. Il se recharge automatiquement</div>
+    </div>
+    <div class="fail-card">
+      <div class="fail-problem">Faire des erreurs de code</div>
+      <div class="fail-fix">Toujours tester. Demande a Light de faire la review systematiquement</div>
+    </div>
+    <div class="fail-card">
+      <div class="fail-problem">Ton trop poli ou corporatif</div>
+      <div class="fail-fix">"Ton direct, pas de bullshit, parle-moi comme un collegue senior"</div>
+    </div>
+  </div>
+
+  <!-- 6. LA ROUTINE -->
+  <h3 class="reveal" style="margin:3rem 0 .5rem;font-size:1.1rem;color:var(--text)">6 — La routine quotidienne</h3>
+  <p class="reveal reveal-delay-1" style="margin-bottom:1.5rem">8 etapes. Chaque jour. C'est tout ce qu'il faut.</p>
+  <div class="routine-timeline reveal reveal-delay-2">
+    <div class="rt-step">
+      <div class="rt-dot">1</div>
+      <div class="rt-content"><h4>Ouvre ton terminal</h4><p>Ghostty, Terminal, iTerm — peu importe.</p><span class="rt-code">cd ~/Desktop/bazar/{projet} && claude</span></div>
+    </div>
+    <div class="rt-step">
+      <div class="rt-dot">2</div>
+      <div class="rt-content"><h4>Dis ce que tu veux faire aujourd'hui</h4><p>Ghost lit ton CLAUDE.md et planifie automatiquement.</p></div>
+    </div>
+    <div class="rt-step">
+      <div class="rt-dot">3</div>
+      <div class="rt-content"><h4>Ghost planifie les taches</h4><p>Il decompose ta mission, identifie les agents a mobiliser, etablit l'ordre.</p></div>
+    </div>
+    <div class="rt-step">
+      <div class="rt-dot">4</div>
+      <div class="rt-content"><h4>Les agents executent en parallele</h4><p>DRE code pendant que Tasha ecrit pendant que Storm cherche. Simultanement.</p></div>
+    </div>
+    <div class="rt-step">
+      <div class="rt-dot">5</div>
+      <div class="rt-content"><h4>Tu reviews les resultats</h4><p>Chaque livrable te passe entre les mains. Tu valides ou tu corriges avec un feedback precis.</p></div>
+    </div>
+    <div class="rt-step">
+      <div class="rt-dot">6</div>
+      <div class="rt-content"><h4>Tu corriges ce qui ne va pas</h4><p>Feedback precis. Jamais "c'est nul". Toujours "le titre est trop long, raccourcis a 6 mots".</p></div>
+    </div>
+    <div class="rt-step">
+      <div class="rt-dot">7</div>
+      <div class="rt-content"><h4>Sauvegarde ton travail</h4><p>Jamais oublier ca.</p><span class="rt-code">/commit</span></div>
+    </div>
+    <div class="rt-step">
+      <div class="rt-dot">8</div>
+      <div class="rt-content"><h4>Repete</h4><p>C'est tout. Chaque session, chaque jour. Le systeme s'enrichit automatiquement.</p></div>
+    </div>
   </div>
 </section>
 
@@ -498,13 +742,52 @@ footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;ma
 
 <div class="section-divider"></div>
 
+<!-- MODULE 09 EXTEND -->
+<section id="extend">
+  <div class="section-label reveal">Module 09</div>
+  <h2 class="reveal">Le systeme grandit avec toi</h2>
+  <p class="reveal reveal-delay-1">Focus OS n'est pas fige. Besoin d'un expert qui n'existe pas ? D'une connaissance manquante ? D'un nouveau workflow ? Tu l'ajoutes. Le systeme absorbe et retient.</p>
+  <div class="extend-grid">
+    <div class="extend-card reveal">
+      <div class="extend-plus">➕</div>
+      <h3>Nouvel agent</h3>
+      <p>Tu decris le besoin a Forge. Il genere l'agent complet — frontmatter, role, outils, posture — valide et dispo immediatement sur tous tes projets.</p>
+      <div class="extend-agent">&#128296; Forge</div>
+    </div>
+    <div class="extend-card reveal reveal-delay-1">
+      <div class="extend-plus">➕</div>
+      <h3>Nouveau skill</h3>
+      <p>Une techno, un outil, une methode a apprendre ? Lafouine cree un skill structure avec concepts cles, best practices et erreurs a eviter. L'INDEX.md est mis a jour automatiquement.</p>
+      <div class="extend-agent">&#128218; Lafouine</div>
+    </div>
+    <div class="extend-card reveal reveal-delay-2">
+      <div class="extend-plus">➕</div>
+      <h3>Nouveau type de projet</h3>
+      <p>Un workflow qui n'existe pas encore dans le systeme ? Ghost definit la structure, Forge cree les agents manquants, Lafouine documente le pattern. Le workflow est reutilisable.</p>
+      <div class="extend-agent">&#128123; Ghost</div>
+      <span style="display:inline-block;width:.4rem"></span>
+      <div class="extend-agent" style="margin-top:.4rem">&#128296; Forge</div>
+      <span style="display:inline-block;width:.4rem"></span>
+      <div class="extend-agent" style="margin-top:.4rem">&#128218; Lafouine</div>
+    </div>
+    <div class="extend-card reveal reveal-delay-3">
+      <div class="extend-plus">➕</div>
+      <h3>Nouvelle rule</h3>
+      <p>Tu veux ancrer une preference, une contrainte, un comportement permanent ? Ecris une rule dans <span style="font-family:'SF Mono','Fira Code',monospace;font-size:.85em;color:var(--cyan-light)">~/.claude/rules/</span>. Claude la respecte a chaque session, sur tous les projets.</p>
+      <div class="extend-agent">&#9997;&#65039; Toi directement</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
 <footer>
   <div class="footer-logo">Focus OS v2.0</div>
   <div class="footer-sub">Built by ironblock — Pour aller vite, aller loin, et rester decisionnaire.</div>
 </footer>
 
 <script>
-var AGENTS=[{name:"ghost",emoji:"👻",role:"CEO Strategique",model:"opus",trigger:"Planifie mon projet • Coordonne l'equipe • Donne-moi une strategie",desc:"Ghost est le chef d'orchestre. Il ne code pas, il pense. Il analyse, planifie, coordonne les autres agents et garde la vision d'ensemble. Sur les gros projets, c'est lui qui fait le briefing aux autres agents.",example:"\"Ghost, cree un plan complet pour lancer une formation en ligne sur [sujet]. Business model, structure, timeline, agents a impliquer.\"",tools:["Coordination","Strategie","Planning","Vision360"]},{name:"dre",emoji:"🎨",role:"Frontend & Design",model:"sonnet",trigger:"Cree une landing page • Design le composant • Refais le hero",desc:"DRE est le perfectionniste UI/UX. Pixel-perfect. Il implemente les composants, respecte le design system, optimise les animations et garantit le responsive. Stack: Tailwind v4, GSAP, Framer Motion.",example:"\"DRE, cree un hero section dark premium pour [marque]. Headline fort, CTA visible, animation au scroll. Inspire de Vercel.\"",tools:["HTML/CSS","Tailwind v4","GSAP","Framer Motion","shadcn/ui"]},{name:"tate",emoji:"⚙️",role:"Backend & Infra",model:"sonnet",trigger:"Configure la base de donnees • Deploie le site • Setup l'API",desc:"TATE gere tout ce qui est invisible mais critique. APIs, base de donnees, deploiement, authentification, securite serveur. Il ne laisse pas une faille passer.",example:"\"TATE, configure Supabase avec auth + base de donnees pour [projet]. Migrations, RLS policies, variables d'env propres.\"",tools:["Next.js","Supabase","Vercel","PostgreSQL","Docker"]},{name:"tasha",emoji:"✍️",role:"Copywriting & Contenu",model:"sonnet",trigger:"Ecris le texte de vente • Redige l'email • Cree les ads",desc:"TASHA ecrit pour convertir. Pas pour faire joli. Elle connait les formules qui vendent, les hooks qui accrochent, les CTA qui cliquent. Elle s'adapte a ta cible et ton ton.",example:"\"TASHA, ecris une sequence de 3 emails de bienvenue pour [produit]. Cible: [persona]. Ton: direct, premium, sans bullshit.\"",tools:["Copywriting","Ads","Email","SEO","Scripts video"]},{name:"light",emoji:"🔍",role:"QA & Review",model:"sonnet",trigger:"Verifie le code • Audite la securite • Teste avant deploy",desc:"LIGHT ne laisse rien passer. Il verifie le code line par line, cherche les failles de secu, teste les cas limites. Il est le dernier rempart avant production.",example:"\"LIGHT, audite le composant [fichier]: performance, securite, accessibilite. Liste les problemes par priorite.\"",tools:["Code Review","OWASP","Tests","Audit Perf","Lighthouse"]},{name:"storm",emoji:"🌪️",role:"Recherche & Veille",model:"sonnet",trigger:"Cherche les concurrents • Trouve les tendances • Analyse le marche",desc:"STORM est l'agent qui va sur internet pour toi. Veille concurrentielle, recherche de tendances, analyse de marche, verification de faits. Il source tout. Il invente rien.",example:"\"STORM, analyse les 5 principaux concurrents de [business]. Prix, fonctionnalites, positionnement, points faibles. Sources recentes.\"",tools:["Deep Search","OSINT","Veille","Analyse","Vision360"]},{name:"tommy",emoji:"🎯",role:"Branding & Visuels",model:"sonnet",trigger:"Cree l'identite visuelle • Genere le moodboard • Definit les couleurs",desc:"TOMMY construit les marques. Identite visuelle, charte graphique, moodboard, guidelines. Il pense en systemes visuels coherents, pas en elements isoles.",example:"\"TOMMY, cree une identite complete pour [marque]. Positionnement: [premium/accessible/tech]. Inspirations: [refs]. Livrable: palette + typo + regles.\"",tools:["Branding","Design System","Figma","Guidelines","Moodboard"]},{name:"forge",emoji:"🔨",role:"Agent Factory",model:"sonnet",trigger:"Cree un agent specialise • J'ai besoin d'un expert [domaine]",desc:"FORGE cree de nouveaux agents a la demande. Tu lui decris le besoin, il genere un agent complet avec frontmatter, role, outils, stack, posture. Valide automatiquement, dispo immediatement.",example:"\"FORGE, cree un agent specialise en Amazon FBA. Role: expert listing + PPC + BSR. Outils: Helium10, Jungle Scout.\"",tools:["Agent Creation","YAML","Validation","Duplication check"]},{name:"lafouine",emoji:"📚",role:"Bibliothecaire IA",model:"sonnet",trigger:"Indexe cette connaissance • Mets a jour le skill • Cree un skill sur [sujet]",desc:"LAFOUINE gere la bibliotheque de connaissances. Elle indexe les nouveaux apprentissages, cree et met a jour les skills, maintient l'INDEX.md. Le systeme s'enrichit automatiquement grace a elle.",example:"\"LAFOUINE, cree un skill complet sur [sujet]. Sources: [URLs]. Inclure: concepts cles, best practices, erreurs a eviter.\"",tools:["Skills","INDEX.md","MEMORY.md","Documentation"]}];
+var AGENTS=[{name:"ghost",emoji:"👻",role:"CEO Strategique",trigger:"Planifie mon projet • Coordonne l'equipe • Donne-moi une strategie",desc:"Ghost est le chef d'orchestre. Il ne code pas, il pense. Il analyse, planifie, coordonne les autres agents et garde la vision d'ensemble. Sur les gros projets, c'est lui qui fait le briefing aux autres agents.",example:"\"Ghost, cree un plan complet pour lancer une formation en ligne sur [sujet]. Business model, structure, timeline, agents a impliquer.\"",tools:["Coordination","Strategie","Planning","Vision360"]},{name:"dre",emoji:"🎨",role:"Frontend & Design",trigger:"Cree une landing page • Design le composant • Refais le hero",desc:"DRE est le perfectionniste UI/UX. Pixel-perfect. Il implemente les composants, respecte le design system, optimise les animations et garantit le responsive. Stack: Tailwind v4, GSAP, Framer Motion.",example:"\"DRE, cree un hero section dark premium pour [marque]. Headline fort, CTA visible, animation au scroll. Inspire de Vercel.\"",tools:["HTML/CSS","Tailwind v4","GSAP","Framer Motion","shadcn/ui"]},{name:"tate",emoji:"⚙️",role:"Backend & Infra",trigger:"Configure la base de donnees • Deploie le site • Setup l'API",desc:"TATE gere tout ce qui est invisible mais critique. APIs, base de donnees, deploiement, authentification, securite serveur. Il ne laisse pas une faille passer.",example:"\"TATE, configure Supabase avec auth + base de donnees pour [projet]. Migrations, RLS policies, variables d'env propres.\"",tools:["Next.js","Supabase","Vercel","PostgreSQL","Docker"]},{name:"tasha",emoji:"✍️",role:"Copywriting & Contenu",trigger:"Ecris le texte de vente • Redige l'email • Cree les ads",desc:"TASHA ecrit pour convertir. Pas pour faire joli. Elle connait les formules qui vendent, les hooks qui accrochent, les CTA qui cliquent. Elle s'adapte a ta cible et ton ton.",example:"\"TASHA, ecris une sequence de 3 emails de bienvenue pour [produit]. Cible: [persona]. Ton: direct, premium, sans bullshit.\"",tools:["Copywriting","Ads","Email","SEO","Scripts video"]},{name:"light",emoji:"🔍",role:"QA & Review",trigger:"Verifie le code • Audite la securite • Teste avant deploy",desc:"LIGHT ne laisse rien passer. Il verifie le code line par line, cherche les failles de secu, teste les cas limites. Il est le dernier rempart avant production.",example:"\"LIGHT, audite le composant [fichier]: performance, securite, accessibilite. Liste les problemes par priorite.\"",tools:["Code Review","OWASP","Tests","Audit Perf","Lighthouse"]},{name:"storm",emoji:"🌪️",role:"Recherche & Veille",trigger:"Cherche les concurrents • Trouve les tendances • Analyse le marche",desc:"STORM est l'agent qui va sur internet pour toi. Veille concurrentielle, recherche de tendances, analyse de marche, verification de faits. Il source tout. Il invente rien.",example:"\"STORM, analyse les 5 principaux concurrents de [business]. Prix, fonctionnalites, positionnement, points faibles. Sources recentes.\"",tools:["Deep Search","OSINT","Veille","Analyse","Vision360"]},{name:"tommy",emoji:"🎯",role:"Branding & Visuels",trigger:"Cree l'identite visuelle • Genere le moodboard • Definit les couleurs",desc:"TOMMY construit les marques. Identite visuelle, charte graphique, moodboard, guidelines. Il pense en systemes visuels coherents, pas en elements isoles.",example:"\"TOMMY, cree une identite complete pour [marque]. Positionnement: [premium/accessible/tech]. Inspirations: [refs]. Livrable: palette + typo + regles.\"",tools:["Branding","Design System","Figma","Guidelines","Moodboard"]},{name:"forge",emoji:"🔨",role:"Agent Factory",trigger:"Cree un agent specialise • J'ai besoin d'un expert [domaine]",desc:"FORGE cree de nouveaux agents a la demande. Tu lui decris le besoin, il genere un agent complet avec frontmatter, role, outils, stack, posture. Valide automatiquement, dispo immediatement.",example:"\"FORGE, cree un agent specialise en Amazon FBA. Role: expert listing + PPC + BSR. Outils: Helium10, Jungle Scout.\"",tools:["Agent Creation","YAML","Validation","Duplication check"]},{name:"lafouine",emoji:"📚",role:"Bibliothecaire IA",trigger:"Indexe cette connaissance • Mets a jour le skill • Cree un skill sur [sujet]",desc:"LAFOUINE gere la bibliotheque de connaissances. Elle indexe les nouveaux apprentissages, cree et met a jour les skills, maintient l'INDEX.md. Le systeme s'enrichit automatiquement grace a elle.",example:"\"LAFOUINE, cree un skill complet sur [sujet]. Sources: [URLs]. Inclure: concepts cles, best practices, erreurs a eviter.\"",tools:["Skills","INDEX.md","MEMORY.md","Documentation"]}];
 
 var PROJECT_TYPES=[{emoji:"🌐",name:"Landing Page",desc:"De zero a un site deploye avec copie + design",steps:[{label:"Brief",sub:"Ghost",tooltip:"Ghost clarifie l'objectif, la cible, le ton. Il pose les bonnes questions avant de demarrer."},{label:"Design System",sub:"Tommy+DRE",tooltip:"Palette, typo, composants de base. La charte visuelle du site."},{label:"Wireframe",sub:"DRE",tooltip:"Structure des sections, hierarchie visuelle. Validee avant dev."},{label:"Copy",sub:"Tasha",tooltip:"Textes de vente, headlines, CTA. Optimises pour convertir."},{label:"Dev",sub:"DRE+Tate",tooltip:"Integration HTML/CSS/JS. Responsive, animations, performance."},{label:"QA",sub:"Light",tooltip:"Tests cross-browser, Lighthouse, verification des liens."},{label:"Deploy",sub:"Tate",tooltip:"Vercel deploy, domaine configure, SSL, variables d'env."}]},{emoji:"🛒",name:"E-commerce",desc:"Lancement complet d'une boutique ou d'un produit",steps:[{label:"Produit",sub:"Ghost",tooltip:"Definition du produit, USP, pricing, positionnement."},{label:"Branding",sub:"Tommy",tooltip:"Identite visuelle de la marque, charte, moodboard."},{label:"Setup",sub:"Tate",tooltip:"Stack technique, paiement, base de donnees, logistique."},{label:"Copy",sub:"Tasha",tooltip:"Fiches produit, descriptions, emails transactionnels."},{label:"Ads",sub:"Tasha+Storm",tooltip:"Creas pub, ciblage, budget. Base sur analyse concurrents."},{label:"Launch",sub:"Ghost",tooltip:"Plan de lancement, sequence email, monitoring J1."}]},{emoji:"📊",name:"Marketing",desc:"Strategie, plan d'action et KPIs",steps:[{label:"Brainstorm",sub:"Ghost+Storm",tooltip:"Idees, angles, opportunites. Vision360 sur le marche."},{label:"Audit",sub:"Storm+Light",tooltip:"Audit de l'existant, analyse concurrents, gaps."},{label:"Strategie",sub:"Ghost",tooltip:"Plan structure avec priorites, ressources, timeline."},{label:"Contenu",sub:"Tasha",tooltip:"Calendrier editorial, scripts, copie des creas."},{label:"KPIs",sub:"Ghost+Light",tooltip:"Metriques a suivre, dashboards, alertes."}]},{emoji:"🎨",name:"Branding",desc:"Identite visuelle complete d'une marque",steps:[{label:"Brainstorm",sub:"Ghost+Tommy",tooltip:"Valeurs, personnalite de marque, mots-cles visuels."},{label:"Moodboard",sub:"Tommy",tooltip:"References visuelles, ambiances, directions creatives."},{label:"Identite",sub:"Tommy",tooltip:"Logo, couleurs, typo. En plusieurs versions."},{label:"Guidelines",sub:"Tommy+DRE",tooltip:"Charte d'utilisation, regles, exemples do/don't."},{label:"Declinaisons",sub:"DRE",tooltip:"Reseaux sociaux, templates, assets digitaux."}]},{emoji:"📚",name:"Formation",desc:"Contenu pedagogique complet et interactif",steps:[{label:"Objectifs",sub:"Ghost",tooltip:"Ce que l'eleve sait faire a la fin. Outcomes concrets."},{label:"Structure",sub:"Ghost+Tasha",tooltip:"Modules, chapitres, progression pedagogique."},{label:"Contenu",sub:"Tasha",tooltip:"Scripts, textes, exercices. Opus pour la qualite maximale."},{label:"Composants",sub:"DRE",tooltip:"Interface interactive, animations, quizz, design."},{label:"Test",sub:"Light",tooltip:"Test utilisateur, navigation, liens, responsive."},{label:"Publication",sub:"Tate",tooltip:"Deploiement, acces, protection par mot de passe."}]},{emoji:"📑",name:"Presentation",desc:"Deck investisseur, client ou formation",steps:[{label:"Brief",sub:"Ghost",tooltip:"Audience, objectif, message principal, duree."},{label:"Structure",sub:"Ghost+Tasha",tooltip:"Plan narrative, arc emotionnel, slides cles."},{label:"Contenu",sub:"Tasha",tooltip:"Textes, donnees, preuves, arguments."},{label:"Design",sub:"DRE+Tommy",tooltip:"Mise en page, visuels, coherence graphique."},{label:"Export",sub:"Tate",tooltip:"PDF, Notion, HTML interactif selon besoin."}]}];
 
@@ -561,10 +844,6 @@ function renderAgents(){
     
     var tags=document.createElement("div");
     tags.className="agent-tags";
-    var modelTag=document.createElement("span");
-    modelTag.className="tag "+agent.model;
-    modelTag.textContent=agent.model.charAt(0).toUpperCase()+agent.model.slice(1);
-    tags.appendChild(modelTag);
     agent.tools.forEach(function(t){
       var tag=document.createElement("span");
       tag.className="tag";
@@ -750,7 +1029,7 @@ var PROMPT_LIBRARY=[
     {text:"Analyse [CONCURRENT] en profondeur. Produit, pricing, forces, faiblesses, strategie."},
     {text:"Cherche tous les outils pour [BESOIN]. Compare prix, features, avis. Top 3 recommandes."}
   ]},
-  {icon:"&#128200;",label:"Vente & Marketing",desc:"Funnels, scripts de closing, optimisation SEO",templates:[
+  {icon:"&#128200;",label:"Vente & Marketing",desc:"Funnels, scripts de closing, optimisation organique",templates:[
     {text:"Cree un funnel de vente pour [PRODUIT]. Awareness → Consideration → Conversion. Copy + canaux + metriques."},
     {text:"Ecris un script de closing pour [PRODUIT] en B2B. Objections prix, timing, concurrence. Reponses concretes."},
     {text:"Optimise le SEO de [PAGE]. Keywords, meta, structure, liens internes. Audit + corrections."}

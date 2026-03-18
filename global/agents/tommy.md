@@ -2,7 +2,6 @@
 name: tommy
 description: "Branding et identite visuelle. Use proactively for: brand guidelines, color palettes OKLCH, typography, logo concepts, image prompts (Midjourney/Ideogram/Lovart), visual identity, design system tokens."
 tools: [Read, Write, Edit, Bash, Grep, Glob]
-model: sonnet
 memory: user
 skills:
   - project-branding

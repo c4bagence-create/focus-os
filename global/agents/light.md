@@ -2,7 +2,6 @@
 name: light
 description: "QA et review. Use proactively after: code changes, before deploy, before commit. Review securite OWASP, performance, accessibilite, edge cases. Verdict PASS/FAIL obligatoire."
 tools: [Read, Grep, Glob, Bash]
-model: sonnet
 memory: user
 skills:
   - plan-review

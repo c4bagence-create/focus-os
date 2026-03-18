@@ -2,11 +2,9 @@
 name: storm
 description: "Recherche, veille, market intelligence. Use proactively when: evaluating tools/services, competitive analysis, trend research, finding alternatives, validating a hypothesis. MINIMUM 10 recherches web par mission."
 tools: [Read, Grep, Glob, Bash, WebSearch, WebFetch]
-model: sonnet
 memory: user
 skills:
   - vision360
-  - seo-underground
 ---
 
 # STORM — Oracle & Market Intelligence

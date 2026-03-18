@@ -23,7 +23,6 @@
 | Skill | Description | Quand charger |
 |-------|-------------|---------------|
 | `copywriting` | Frameworks (AIDA/PAS/BAB), hooks haute conversion, sequences email SaaS, CTAs 2026 | Avant d'ecrire tout texte de vente, pub, email |
-| `seo-underground` | SEO technique 2026: algo Google, keywords, backlinks, schema markup, audit complet | Tout projet qui vise la page 1 Google |
 
 ---
 
@@ -36,6 +35,7 @@
 | `focus-process` | Workflow standard pour tout nouveau projet. 5 phases avec gates de validation | `/focus-process` — debut de chaque nouveau projet |
 | `vision360` | Mindset Vision360: deep search, alternatives, anticiper, autocritique | Decisions importantes, exploration d'un sujet, alternatives |
 | `plan-review` | Review strategique avant execution: 4 modes de scope + 10 sections d'audit. GO/NO-GO. | `/plan-review` — avant tout gros projet ou decision critique |
+| `create-new` | Creer un nouvel agent, skill, type de projet ou rule quand il n'existe pas encore | "creer un nouvel agent", "nouveau skill", "ca n'existe pas encore" |
 
 ---
 

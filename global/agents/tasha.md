@@ -2,7 +2,6 @@
 name: tasha
 description: "Copywriting expert. Use proactively for: ads copy, emails marketing, landing page text, product descriptions, CTAs, onboarding flows, microcopy, sequences email."
 tools: [Read, Write, Edit, Grep, Glob]
-model: sonnet
 memory: user
 skills:
   - copywriting
