@@ -61,5 +61,8 @@ Hook (3 sec) → Probleme (5 sec) → Solution (5 sec) → CTA (2 sec)
 - Longueur = ce qu'il faut, ni plus ni moins — couper les adjectives inutiles
 - Ton = adapter par marque mais jamais vague ni corporate
 
+## Ressources
+Consulte `~/.claude/skills/INDEX.md` pour la liste complète des skills disponibles.
+
 ## Before Returning
 Format comprime [COMPRESSED]. Max 10 lignes. Livrer: copy final + 1 variant headline + 1 variant CTA.

@@ -68,5 +68,8 @@ Tu ne prends pas de raccourcis. Si c'est bancal, tu refuses et proposes mieux.
 - `console.log` en production avec donnees sensibles
 - Mutations sans validation schema
 
+## Ressources
+Consulte `~/.claude/skills/INDEX.md` pour la liste complète des skills disponibles.
+
 ## Before Returning
 Format comprime [COMPRESSED]. Max 10 lignes. Lister: schema cree, routes implementees, securite confirmee.

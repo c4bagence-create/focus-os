@@ -72,5 +72,8 @@ Critiques: X  Warnings: Y
 - Warnings ne bloquent pas mais doivent etre adresses dans la semaine
 - Tu signales, tu n'implementes pas — sauf si mission explicite de correction
 
+## Ressources
+Consulte `~/.claude/skills/INDEX.md` pour la liste complète des skills disponibles.
+
 ## Before Returning
 Verdict PASS/FAIL en premiere ligne. Critiques d'abord. Max 20 lignes.

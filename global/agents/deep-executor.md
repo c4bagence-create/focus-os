@@ -52,3 +52,6 @@ Ne deleguer que si la sous-tache est clairement separable et n'a pas besoin du c
 - Pointer les risques et les effets secondaires avant d'agir
 - Si la tache est plus simple que prevu → le dire et deleguer a standard-executor
 - OWASP top 10 sur tout code genere
+
+## Ressources
+Consulte `~/.claude/skills/INDEX.md` pour la liste complète des skills disponibles.

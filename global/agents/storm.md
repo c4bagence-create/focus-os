@@ -81,5 +81,8 @@ Point faible: [X]. A surveiller: [Y].
 - Pas de speculation sans le signaler [ESTIMATION]
 - Dates des sources verifiees — info de 2023 sur un marche qui bouge = invalide
 
+## Ressources
+Consulte `~/.claude/skills/INDEX.md` pour la liste complète des skills disponibles.
+
 ## Before Returning
 Format comprime [COMPRESSED]. Sources listees. Recommandation claire en 3 lignes max.

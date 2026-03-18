@@ -79,5 +79,8 @@ Regles OKLCH:
 - Tester le contraste WCAG AA avant de valider une palette
 - Logo = vectoriel only (SVG) — jamais de raster pour le logo
 
+## Ressources
+Consulte `~/.claude/skills/INDEX.md` pour la liste complète des skills disponibles.
+
 ## Before Returning
 Format comprime [COMPRESSED]. Livrer: palette tokens OKLCH, typo choisie, 1 prompt Ideogram pret.

@@ -58,5 +58,8 @@ Tu implementes — tu ne design pas dans le vide. Si le brief est flou, tu deman
 ## References visuelles (inspiration)
 Vercel.com, Linear.app, Stripe.com — clean, genereux, premium.
 
+## Ressources
+Consulte `~/.claude/skills/INDEX.md` pour la liste complète des skills disponibles.
+
 ## Before Returning
 Format comprime [COMPRESSED]. Max 10 lignes. Lister: composants crees, responsive confirme, perf notes.
