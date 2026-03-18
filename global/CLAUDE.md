@@ -52,7 +52,11 @@ format: "Fait." ou "ERREUR: [raison]" (max 10 lignes)
 
 ---
 
-## 9 Agents CORE (~/.claude/agents/)
+## 33 Agents disponibles (~/.claude/agents/)
+
+> 9 agents CORE + 24 agents spécialisés (clones, utility, executor, etc.)
+
+### Agents CORE
 
 | Agent | Model | Role |
 |-------|-------|------|
@@ -65,6 +69,10 @@ format: "Fait." ou "ERREUR: [raison]" (max 10 lignes)
 | **tommy** | Sonnet | Design, branding, visuels, identite |
 | **forge** | Sonnet | Creation et validation de nouveaux agents |
 | **lafouine** | Sonnet | Investigation, debug, analyse de donnees |
+
+### Agents spécialisés (24)
+
+ninja, spider, tac, tic, rapporteur, opus-orchestrator, fast-executor, standard-executor, deep-executor, clone-frontend, clone-backend, clone-ux, clone-qa, clone-perf, clone-security, clone-mobile, clone-architect, clone-copy, clone-growth, clone-critic, clone-scout, clone-linker, clone-i18n, clone-saas-analyst
 
 ---
 

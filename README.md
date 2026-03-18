@@ -1,6 +1,6 @@
 # Focus OS v2.0 — Ton setup IA complet
 
-Claude Code pré-configuré avec 14 agents spécialisés, des workflows project-ready, et un système de mémoire persistante. Installe une fois, utilise à vie.
+Claude Code pré-configuré avec 33 agents spécialisés, des workflows project-ready, et un système de mémoire persistante. Installe une fois, utilise à vie.
 
 ---
 
@@ -8,8 +8,8 @@ Claude Code pré-configuré avec 14 agents spécialisés, des workflows project-
 
 | Composant | Détails |
 |-----------|---------|
-| **14 agents** | ghost (CEO), dre (frontend), tate (backend), tasha (copy), light (QA), storm (recherche), tommy (branding), forge (factory), lafouine (bibliothèque), fast-executor, standard-executor, deep-executor, opus-orchestrator, rapporteur |
-| **13 skills** | vision360, focus-process, agent-creation, plan-review, copywriting, create-new, claude-features, project-landing-page, project-ecommerce, project-marketing-strategy, project-branding, project-presentation, project-formation |
+| **33 agents** | ghost (CEO), dre (frontend), tate (backend), tasha (copy), light (QA), storm (recherche), tommy (branding), forge (factory), lafouine (bibliothèque), fast-executor, standard-executor, deep-executor, opus-orchestrator, rapporteur + 19 agents spécialisés (clones, ninja, spider, tac, tic, et autres) |
+| **17 skills** | vision360, focus-process, agent-creation, plan-review, copywriting, create-new, claude-features, project-landing-page, project-ecommerce, project-marketing-strategy, project-branding, project-presentation, project-formation, design-references, tech-references, marketing-references + 1 standalone |
 | **7 hooks** | Blocage .env, format auto, session learnings, refresh rules, SessionStart, source-date-check, pre-compact |
 | **5 profils** | dev, designer, ceo, marketing, student — CLAUDE.md adapté à chaque rôle |
 | **Sécurité** | git push/commit bloqués par défaut, secrets Keychain macOS, OWASP systématique |
@@ -75,11 +75,12 @@ Après l'installation, lance le script de plugins:
 | supabase | Base de données |
 | github | Issues, PR, repos |
 
-**2 MCP servers** pré-configurés:
+**3 MCP servers** pré-configurés:
 | MCP | Usage |
 |-----|-------|
 | Playwright | Browser automation, screenshots |
 | Context7 | Documentation live des librairies |
+| Brave Search | Recherche web enrichie |
 
 ---
 
