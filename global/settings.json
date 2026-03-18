@@ -13,7 +13,9 @@
       "WebFetch(*)",
       "WebSearch(*)",
       "Task(*)",
-      "Skill(*)"
+      "Skill(*)",
+      "ToolSearch(*)",
+      "mcp__*"
     ],
     "deny": [
       "Bash(git push*)",
@@ -62,14 +64,13 @@
         ]
       }
     ],
-    "_Stop_DISABLED": "session-learnings.sh desactive par defaut (coute des tokens). Pour activer: renommer en 'Stop' et supprimer ce commentaire",
-    "Stop_MANUAL": [
+    "Stop": [
       {
         "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/session-learnings.sh"
+            "command": "bash ~/.claude/hooks/notify-done.sh"
           }
         ]
       }
@@ -93,10 +94,48 @@
     "context7": {
       "command": "npx",
       "args": ["-y", "@anthropic-ai/mcp-server-context7"]
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
     }
   },
-  "effortLevel": "medium",
-  "teammateMode": "auto",
-  "_plugins_note": "Les plugins ne s'installent PAS via settings.json. Utiliser: claude plugin add [nom]. Recommandes: commit-commands, code-review, claude-md-management, playground, hookify, safety-net. Voir aussi: ./install-plugins.sh",
-  "_mcp_note": "MCP optionnels (Supabase, Brave Search, Notion, Figma, Chrome DevTools) dans mcp-servers-optional.json — copier les blocs nécessaires ici et remplacer les placeholders YOUR_*"
+  "enabledPlugins": {
+    "commit-commands@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "playground@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "safety-net@cc-marketplace": true,
+    "security-guidance@claude-plugins-official": true,
+    "claude-mem@thedotmack": true,
+    "stripe@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true,
+    "supabase@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "adversarial-spec@adversarial-spec": true
+  },
+  "extraKnownMarketplaces": {
+    "cc-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "kenryu42/cc-marketplace"
+      }
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    },
+    "adversarial-spec": {
+      "source": {
+        "source": "github",
+        "repo": "zscole/adversarial-spec"
+      }
+    }
+  },
+  "effortLevel": "high",
+  "teammateMode": "auto"
 }

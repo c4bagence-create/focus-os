@@ -2,15 +2,16 @@
 set -uo pipefail
 
 # ============================================================
-# FOCUS OS — Installation des plugins Claude Code
+# FOCUS OS — Installation COMPLETE des plugins Claude Code
+# Tout s'installe. Pas de questions. L'élève arrive, c'est prêt.
 # ============================================================
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
-YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 RESET='\033[0m'
 BOLD='\033[1m'
+DIM='\033[2m'
 
 ok()   { echo -e "  ${GREEN}✓${RESET} $1"; }
 fail() { echo -e "  ${RED}✗${RESET} $1"; }
@@ -23,11 +24,13 @@ if ! command -v claude &>/dev/null; then
 fi
 
 echo ""
-echo -e "${BOLD}FOCUS OS — Installation des plugins${RESET}"
+echo -e "${BOLD}══════════════════════════════════════${RESET}"
+echo -e "${BOLD}  FOCUS OS — Installation des plugins ${RESET}"
+echo -e "${BOLD}══════════════════════════════════════${RESET}"
 echo ""
 
-# Plugins essentiels (core workflow)
-CORE_PLUGINS=(
+# TOUS les plugins — on installe TOUT
+ALL_PLUGINS=(
     "commit-commands@claude-plugins-official"
     "code-review@claude-plugins-official"
     "claude-md-management@claude-plugins-official"
@@ -35,62 +38,60 @@ CORE_PLUGINS=(
     "hookify@claude-plugins-official"
     "safety-net@cc-marketplace"
     "security-guidance@claude-plugins-official"
-)
-
-# Plugins optionnels (selon profil)
-OPTIONAL_PLUGINS=(
     "claude-mem@thedotmack"
     "stripe@claude-plugins-official"
     "figma@claude-plugins-official"
     "vercel@claude-plugins-official"
     "supabase@claude-plugins-official"
     "github@claude-plugins-official"
+    "adversarial-spec@adversarial-spec"
+)
+
+# Descriptions pour que l'élève comprenne ce qui s'installe
+declare -A DESCRIPTIONS
+DESCRIPTIONS=(
+    ["commit-commands"]="Git workflow — /commit, /commit-push-pr"
+    ["code-review"]="Review automatique du code"
+    ["claude-md-management"]="Audit et maintenance CLAUDE.md"
+    ["playground"]="Création de démos HTML interactives"
+    ["hookify"]="Création facile de hooks"
+    ["safety-net"]="Filet de sécurité automatique"
+    ["security-guidance"]="Détection failles OWASP en temps réel"
+    ["claude-mem"]="Mémoire persistante cross-sessions"
+    ["stripe"]="Intégration paiement Stripe"
+    ["figma"]="Lecture fichiers et composants Figma"
+    ["vercel"]="Déploiement et logs Vercel"
+    ["supabase"]="Base de données et auth Supabase"
+    ["github"]="Issues, PR, repos GitHub"
+    ["adversarial-spec"]="Spec collaborative multi-LLM"
 )
 
 installed=0
 failed=0
+total=${#ALL_PLUGINS[@]}
 
-echo -e "${BOLD}Plugins essentiels:${RESET}"
-for plugin in "${CORE_PLUGINS[@]}"; do
+echo -e "${BOLD}Installation de $total plugins...${RESET}"
+echo ""
+
+for plugin in "${ALL_PLUGINS[@]}"; do
     name="${plugin%%@*}"
+    desc="${DESCRIPTIONS[$name]:-}"
     if claude plugin add "$plugin" 2>/dev/null; then
-        ok "$name"
+        ok "$name ${DIM}— $desc${RESET}"
         ((installed++))
     else
-        fail "$name (erreur — tu pourras l'installer manuellement: claude plugin add $plugin)"
+        fail "$name ${DIM}(claude plugin add $plugin)${RESET}"
         ((failed++))
     fi
 done
 
 echo ""
-echo -e "${BOLD}Plugins optionnels:${RESET}"
-echo -e "${YELLOW}Installe ceux qui correspondent à ton usage:${RESET}"
+echo -e "${BOLD}═══════════════════════════════════${RESET}"
+echo -e "  ${GREEN}$installed${RESET}/$total plugins installés"
+if (( failed > 0 )); then
+    echo -e "  ${RED}$failed${RESET} échoués — relance le script pour réessayer"
+fi
+echo -e "${BOLD}═══════════════════════════════════${RESET}"
 echo ""
-
-for plugin in "${OPTIONAL_PLUGINS[@]}"; do
-    name="${plugin%%@*}"
-    echo -ne "  Installer ${BOLD}$name${RESET} ? (o/N) "
-    read -r answer
-    if [[ "$answer" =~ ^[oOyY]$ ]]; then
-        if claude plugin add "$plugin" 2>/dev/null; then
-            ok "$name installé"
-            ((installed++))
-        else
-            fail "$name (erreur)"
-            ((failed++))
-        fi
-    else
-        info "$name ignoré"
-    fi
-done
-
-echo ""
-echo -e "${BOLD}Résumé:${RESET} $installed installés, $failed échoués"
-echo ""
-
-echo -e "${BOLD}Configuration des marketplaces...${RESET}"
-# Les marketplaces sont auto-ajoutées par claude plugin add
-
-echo ""
-echo -e "${GREEN}Plugins installés.${RESET} Relance claude pour les activer."
+echo -e "${CYAN}Relance ${BOLD}claude${RESET}${CYAN} pour activer les plugins.${RESET}"
 echo ""
