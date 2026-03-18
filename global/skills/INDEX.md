@@ -23,6 +23,9 @@
 | Skill | Description | Quand charger |
 |-------|-------------|---------------|
 | `copywriting` | Frameworks (AIDA/PAS/BAB), hooks haute conversion, sequences email SaaS, CTAs 2026 | Avant d'ecrire tout texte de vente, pub, email |
+| `design-references` | 26 sites de ref, patterns UI par type de projet, OKLCH, typo, spacing, animations, CSS conventions, WCAG AA | Avant tout travail visuel: landing, composant, UI, design system |
+| `tech-references` | Stack 2026 (Next.js/Supabase/Drizzle), TypeScript, securite OWASP, Docker, testing, performance, Git | Avant tout travail backend, infra, API, deploy |
+| `marketing-references` | Frameworks persuasion, metriques par canal, funnels, A/B testing, analytics setup, deliverabilite email, growth | Avant tout travail marketing, ads, campagne, email, growth |
 
 ---
 
@@ -73,4 +76,4 @@ triggers:
 
 ---
 
-*Total: 13 skills | Derniere mise a jour: 2026-03-18*
+*Total: 16 skills | Derniere mise a jour: 2026-03-18*

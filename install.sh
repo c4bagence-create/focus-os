@@ -257,7 +257,7 @@ install_agents() {
   fi
 
   # Agents CORE toujours installes
-  CORE_AGENTS=("ghost" "dre" "tate" "tasha" "light" "storm" "tommy" "forge" "lafouine" "fast-executor" "standard-executor" "deep-executor" "opus-orchestrator" "rapporteur")
+  CORE_AGENTS=("ghost" "dre" "tate" "tasha" "light" "storm" "tommy" "forge" "lafouine" "fast-executor" "standard-executor" "deep-executor" "opus-orchestrator" "rapporteur" "clone-scout" "clone-frontend" "clone-backend" "clone-qa" "clone-security" "clone-architect" "clone-ux" "clone-perf" "clone-mobile" "clone-i18n" "clone-critic" "clone-growth" "clone-saas-analyst" "clone-linker" "clone-copy" "tac" "tic" "ninja" "spider")
 
   for agent in "${CORE_AGENTS[@]}"; do
     SOURCE="$AGENTS_SRC/${agent}.md"

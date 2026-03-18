@@ -686,7 +686,7 @@ phase3_installation() {
   fi
 
   # Agents CORE
-  local core_agents=("ghost" "dre" "tate" "tasha" "light" "storm" "tommy" "forge" "lafouine" "fast-executor" "standard-executor" "deep-executor" "opus-orchestrator" "rapporteur")
+  local core_agents=("ghost" "dre" "tate" "tasha" "light" "storm" "tommy" "forge" "lafouine" "fast-executor" "standard-executor" "deep-executor" "opus-orchestrator" "rapporteur" "clone-scout" "clone-frontend" "clone-backend" "clone-qa" "clone-security" "clone-architect" "clone-ux" "clone-perf" "clone-mobile" "clone-i18n" "clone-critic" "clone-growth" "clone-saas-analyst" "clone-linker" "clone-copy" "tac" "tic" "ninja" "spider")
   local agents_installed=0
   for agent in "${core_agents[@]}"; do
     local src="$SCRIPT_DIR/global/agents/${agent}.md"
